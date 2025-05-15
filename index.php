@@ -6,22 +6,24 @@ $controller = new controller($pdo);
 $rota = $_GET['rota'] ?? 'main'; // padrão
 
 switch ($rota) {
-    case 'cadastro':
-        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->cadastrar() : $controller->mostrarCadastro();  
-        break;
-
     case 'loginOrientador':
-        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->loginProfessor();
+        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->telaloginProfessor();
         break;
-
     case 'loginProfessor':
-        $controller->loginProfessor();
+        $controller->telaloginProfessor();
         break;
-
     case 'main_orientador':
         $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainOrientador();
         break;
-
+    case 'loginAluno':
+        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginAluno() : $controller->telaloginAluno();
+        break;
+    case 'telaloginAluno':
+        $controller->telaloginAluno();
+        break;
+    case 'main_aluno':
+        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainOrientador();
+        break;
     case 'logout':
         $controller->logout();
         break;

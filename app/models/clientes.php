@@ -38,6 +38,33 @@ class User {
             return ['status' => 'email_eh_aluno'];
         }
 
+        return ['status' => 'email_nao_encontrado'];
+    }
+
+    public function autenticarAluno($email, $senha) {
+
+        $sql = "SELECT * FROM aluno WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($aluno) {
+            if (password_verify($senha, $aluno['senha'])) {
+                return ['status' => 'ok', 'user' => $aluno];
+            } else {
+                return ['status' => 'senha_incorreta'];
+            }
+        }
+
+        $sql = "SELECT * FROM orientador WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $prof = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($prof) {
+            return ['status' => 'email_eh_prof'];
+        }
+
         // 3. E-mail não encontrado
         return ['status' => 'email_nao_encontrado'];
     }

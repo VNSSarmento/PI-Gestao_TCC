@@ -10,7 +10,6 @@
         <div class="login-container">
             <div class="login-box">
                 <h1>Login do professor</h1>
-                
                 <form action="/?rota=loginOrientador" method="POST">
                     <div class="input-group">
                         <label for="email">Email</label>

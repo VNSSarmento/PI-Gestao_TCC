@@ -13,11 +13,14 @@
                 <form action="/?rota=loginAluno" method="POST">
                     <div class="input-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
                     </div>
                     <div class="input-group">
                         <label for="password">Senha</label>
                         <input type="password" id="password" name="password" required>
+                         <?php if (!empty($erro)): ?>
+                               <p style="color: red;"><?php echo $erro; ?></p>
+                           <?php endif; ?>
                     </div>
                     <button type="submit" class="login-btn">Fazer login</button>
                     <a href="/app/views/telas/recuperar_senha_aluno.php" class="forgot-password">Esqueceu a senha?</a>

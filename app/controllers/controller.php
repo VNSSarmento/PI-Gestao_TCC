@@ -23,7 +23,7 @@ class controller {
     public function mainOrientador() {
         session_start();
         if (!isset($_SESSION['cliente_id'])) {
-            header("Location: /?rota=loginProfessor");
+            header("Location: /?rota=telaloginProfessor");
             exit;
         }
 
@@ -35,10 +35,6 @@ class controller {
         include __DIR__.'/../views/telas/main_orientador.php';
     }
 
-    public function mostrarLogin() {
-        include __DIR__.'/../views/login.php';
-    }
-
     public function logout() {
     session_start();
     session_destroy();
@@ -46,10 +42,10 @@ class controller {
     exit;
 }
 
-    public function loginAluno() {
+    public function telaloginAluno() {
         include __DIR__.'/../views/telas/login_aluno.php';
     }
-     public function loginProfessor() {
+     public function telaloginProfessor() {
         include __DIR__.'/../views/telas/login_professor.php';
     }
 
@@ -62,7 +58,7 @@ class controller {
         $email = $_POST['email'] ?? '';
         $senha = $_POST['senha'] ?? '';
 
-        $resultado = $this->user->autenticarProfessor($email, $senha);
+        $resultado = $this->user->autenticarProfessor($email, $senha); //isso aqui tem que vir do model
 
         switch ($resultado['status']) {
             case 'ok':
@@ -81,7 +77,7 @@ class controller {
                 break;
 
             case 'email_eh_aluno':
-                $erro = "Este e-mail está cadastrado como aluno, não como professor.";
+                $erro = "Email invalido.";
                 break;
 
             case 'email_nao_encontrado':
@@ -92,6 +88,44 @@ class controller {
         include __DIR__ . '/../views/telas/login_professor.php';
     } else {
         include __DIR__ . '/../views/telas/login_professor.php';
+        }
+    }
+
+public function loginAluno() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = $_POST['email'] ?? '';
+        $senha = $_POST['senha'] ?? '';
+
+        $resultado = $this->user->autenticarAluno($email, $senha); //isso aqui tem que vir do model
+
+        switch ($resultado['status']) {
+            case 'ok':
+                session_start();
+                if (!in_array($email, $_SESSION['historico_emails'] ?? [])) {
+                    $_SESSION['historico_emails'][] = $email;
+                            }
+                $_SESSION['cliente_id'] = $resultado['user']['id'];
+                $_SESSION['cliente_nome'] = $resultado['user']['nome'];
+                $_SESSION['tipo'] = 'aluno';
+                header("Location: /?rota=main_aluno");
+                exit;
+
+            case 'senha_incorreta':
+                $erro = "Senha incorreta.";
+                break;
+
+            case 'email_eh_prof':
+                $erro = "Email invalido.";
+                break;
+
+            case 'email_nao_encontrado':
+                $erro = "E-mail não encontrado.";
+                break;
+        }
+
+        include __DIR__ . '/../views/telas/login_Aluno.php';
+    } else {
+        include __DIR__ . '/../views/telas/login_aluno.php';
         }
     }
 
