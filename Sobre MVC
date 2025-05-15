@@ -1,0 +1,8 @@
+https://desenvolvermvc.com.br/cuso/edit/4
+index - quando carrega o controller e nao passo o metodo
+show - quando quero pegar um registro especifico 
+edit - mostrar formulario para atualizar registro
+update - atualiza o registro do banco
+create - mostra o formulario para cadastrar um registro
+store - cadastrar registro no banco
+destroy - deletar registro do banco ou logout do sistema
