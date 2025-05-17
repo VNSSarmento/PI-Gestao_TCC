@@ -13,34 +13,13 @@ class controller {
         $this->user = new user($pdo);
     }
 
+    public function telaCoordenador(){
+        include __DIR__.'/../views/telas/tela_inicial_coordenador.php';
+    }
+
     public function main() {
         include __DIR__.'/../views/telas/main.php';
     }
-
-    public function esqueciSenha() {
-        include __DIR__ . '/../views/telas/recuperar_senha.php';
-    }
-    public function mainOrientador() {
-        session_start();
-        if (!isset($_SESSION['cliente_id'])) {
-            header("Location: /?rota=telaloginProfessor");
-            exit;
-        }
-
-        $id = $_SESSION['cliente_id'];
-        $stmt = $this->pdo->prepare("SELECT * FROM orientador WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        include __DIR__.'/../views/telas/main_orientador.php';
-    }
-
-    public function logout() {
-    session_start();
-    session_destroy();
-    header("Location: /?rota=loginProfessor");
-    exit;
-}
 
     public function telaloginAluno() {
         include __DIR__.'/../views/telas/login_aluno.php';
@@ -53,43 +32,80 @@ class controller {
         include __DIR__ . '/../views/cadastro.php';
     }
 
+
+    public function esqueciSenha() {
+        include __DIR__ . '/../views/telas/recuperar_senha.php';
+    }
+
+    public function mainCoordenador() {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header("Location: /?rota=telaloginProfessor");
+            exit;
+        }
+
+        $id = $_SESSION['cliente_id'];
+        $stmt = $this->pdo->prepare("SELECT * FROM coordenador WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        include __DIR__.'/../views/telas/tela_inicial_coordenador.php';
+    }
+    
+    public function mainOrientador() {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header("Location: /?rota=telaloginProfessor");
+            exit;
+        }
+
+        $id = $_SESSION['cliente_id'];
+        $stmt = $this->pdo->prepare("SELECT * FROM orientador WHERE id = :id");
+        $stmt->execute([':id' => $id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $orientadorId = $_SESSION['cliente_id']; // ou onde você guardar o ID do orientador
+
+        $alunos = $this->user->buscarAlunosDoOrientador($orientadorId);
+
+        include __DIR__ . '/../views/telas/main_orientador.php';
+    }
+
+    public function logout() {
+    session_start();
+    session_destroy();
+    header("Location: /?rota=main");
+    exit;
+}
+
  public function loginOrientador() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['email'] ?? '';
         $senha = $_POST['senha'] ?? '';
 
-        $resultado = $this->user->autenticarProfessor($email, $senha); //isso aqui tem que vir do model
+                $resultado = $this->user->autenticarProfessor($email, $senha);
 
-        switch ($resultado['status']) {
-            case 'ok':
-                session_start();
-                if (!in_array($email, $_SESSION['historico_emails'] ?? [])) {
-                    $_SESSION['historico_emails'][] = $email;
-                            }
-                $_SESSION['cliente_id'] = $resultado['user']['id'];
-                $_SESSION['cliente_nome'] = $resultado['user']['nome'];
-                $_SESSION['tipo'] = 'professor';
+   if ($resultado['status'] === 'ok') {
+            session_start();
+            $_SESSION['cliente_id'] = $resultado['user']['id'];
+            $_SESSION['cliente_nome'] = $resultado['user']['nome'];
+            $_SESSION['tipo'] = $resultado['tipo'];
+
+            if ($resultado['tipo'] === 'coordenador') {
+                header("Location: /?rota=tela_inicial_coordenador");
+            } else {
                 header("Location: /?rota=main_orientador");
-                exit;
-
-            case 'senha_incorreta':
-                $erro = "Senha incorreta.";
-                break;
-
-            case 'email_eh_aluno':
-                $erro = "Email invalido.";
-                break;
-
-            case 'email_nao_encontrado':
-                $erro = "E-mail não encontrado.";
-                break;
+            }
+            exit;
+        } else {
+            $erro = "Email ou senha incorretos.";
         }
 
         include __DIR__ . '/../views/telas/login_professor.php';
     } else {
         include __DIR__ . '/../views/telas/login_professor.php';
-        }
     }
+}
 
 public function loginAluno() {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

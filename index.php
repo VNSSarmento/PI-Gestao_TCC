@@ -7,7 +7,11 @@ $rota = $_GET['rota'] ?? 'main'; // padrão
 
 switch ($rota) {
     case 'loginOrientador':
-        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->telaloginProfessor();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->loginOrientador();
+        }else {
+            $controller->telaloginProfessor();
+     }
         break;
     case 'loginProfessor':
         $controller->telaloginProfessor();
@@ -15,6 +19,12 @@ switch ($rota) {
     case 'main_orientador':
         $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainOrientador();
         break;
+    case 'main_coordenador':
+        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainCoordenador();
+        break;
+    case 'tela_inicial_coordenador':
+        $controller->mainCoordenador();
+    break;  
     case 'loginAluno':
         $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginAluno() : $controller->telaloginAluno();
         break;

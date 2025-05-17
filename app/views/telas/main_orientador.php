@@ -29,18 +29,20 @@
     </header>
 
     <div class="content-wrapper">
-         <aside class="barra_lateral">
-      <div class="pesquisa">
-        <input type="text" placeholder="Digite o nome do aluno">
-      </div>
-      <h3>Colaboradores</h3>
-      <ul class="colaborador_lista">
-        <li><span class="nome">Renan Machado</span> <span class="tipo">Orientando</span></li>
-        <li><span class="nome">Paula Lima</span> <span class="tipo">Orientador</span></li>
-        <li><span class="nome">Carlos Alberto</span> <span class="tipo">Orientando</span></li>
-        <li><span class="nome">Fernanda Souza</span> <span class="tipo">Orientador</span></li>
-      </ul>
-    </aside>
+            <aside class="barra_lateral">
+                 <div class="pesquisa">
+                 <input type="text" placeholder="Digite o nome do aluno">
+                 </div>
+                 <h3>Orientandos</h3>
+                 <ul class="colaborador_lista">
+                 <?php foreach ($alunos as $aluno): ?>
+                  <li>
+                  <span class="nome"><?= htmlspecialchars($aluno['nome']) ?></span>
+                 <span class="tipo">Orientando</span>
+                  </li>
+               <?php endforeach; ?>
+                </ul>
+            </aside>
         <main class="content">
             <section class="lista_documentos">
                 <div class="documento_item">

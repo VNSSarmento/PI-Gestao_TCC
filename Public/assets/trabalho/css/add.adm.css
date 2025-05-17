@@ -1,0 +1,109 @@
+.modal_add_content_main {
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal_add_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3f8792;
+  padding: 0 20px;
+  color: white;
+}
+
+.modal_add_usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal_add_img img {
+  width: 50px;
+  height: 50px;
+}
+
+.modal_add_seta img {
+  width: 25px;
+  cursor: pointer;
+}
+
+.modal_add_formulario {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.modal_add_informacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal_add_campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal_add_campo input,
+.modal_add_campo select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+}
+
+.modal_add_tipo_grupo {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.modal_add_coluna {
+  flex: 1;
+  min-width: 250px;
+}
+
+.modal_add_coluna h2 {
+  margin: 0 0 5px 0;
+}
+
+.modal_add_coluna p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.modal_add_opcoes_tipo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal_add_opcao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal_add_botao {
+  align-self: center;
+  background-color: #3f8792;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.modal_add_botao:hover {
+  background-color: #2d6a75;
+}
