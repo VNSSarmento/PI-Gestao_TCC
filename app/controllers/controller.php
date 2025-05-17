@@ -37,20 +37,28 @@ class controller {
         include __DIR__ . '/../views/telas/recuperar_senha.php';
     }
 
-    public function mainCoordenador() {
-        session_start();
-        if (!isset($_SESSION['cliente_id'])) {
-            header("Location: /?rota=telaloginProfessor");
-            exit;
-        }
-
-        $id = $_SESSION['cliente_id'];
-        $stmt = $this->pdo->prepare("SELECT * FROM coordenador WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        include __DIR__.'/../views/telas/tela_inicial_coordenador.php';
+    public function cadastrarUser(){
+        include __DIR__.'/../views/telas/add.adm.php';
     }
+
+    public function modalAddUsuario() {
+        include __DIR__. '/../views/telas/particional/add_usuario_modal.php';
+    }
+
+
+    public function mainCoordenador() {
+    session_start();
+    if (!isset($_SESSION['cliente_id'])) {
+        header("Location: /?rota=telaloginProfessor");
+        exit;
+    }
+
+    $user = $this->user->buscarPorId($_SESSION['cliente_id']);
+    $colaboradores = $this->user->buscarTodosColaboradores();
+
+    include __DIR__ . '/../views/telas/tela_inicial_coordenador.php';
+    }
+    
     
     public function mainOrientador() {
         session_start();
@@ -83,7 +91,7 @@ class controller {
         $email = $_POST['email'] ?? '';
         $senha = $_POST['senha'] ?? '';
 
-                $resultado = $this->user->autenticarProfessor($email, $senha);
+        $resultado = $this->user->autenticarProfessor($email, $senha);
 
    if ($resultado['status'] === 'ok') {
             session_start();
@@ -92,6 +100,7 @@ class controller {
             $_SESSION['tipo'] = $resultado['tipo'];
 
             if ($resultado['tipo'] === 'coordenador') {
+                $user = $this->user->buscarPorId($_SESSION['cliente_id']);
                 header("Location: /?rota=tela_inicial_coordenador");
             } else {
                 header("Location: /?rota=main_orientador");
@@ -145,7 +154,38 @@ public function loginAluno() {
         }
     }
 
-public function enviarLinkRecuperacao() {
+    public function admCadastrarUser() {
+        $tipo = $_POST['tipo_usuario'] ?? '';
+        $nome = $_POST['nome'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $faculdade = $_POST['faculdade'] ?? '';
+        $curso = $_POST['curso'] ?? '';
+        $orientador_id = $_POST['orientador_id'] ?? null;
+
+    if ($tipo === 'orientando') {
+        if (empty($orientador_id)) {
+            echo 'Erro: orientador não selecionado.';
+            return;
+        }
+
+        $aluno = [$nome, $email, $faculdade, $curso, $orientador_id];
+        $this->user->admCadastroAluno($aluno);
+        echo 'Aluno cadastrado com sucesso!';
+    } else {
+        // Aqui você pode tratar os outros tipos se quiser
+        echo 'Tipo de usuário não suportado para cadastro.';
+    }
+}
+
+
+    public function listarOrientadores() {
+    header('Content-Type: application/json');
+        $orientadores = $this->user->buscarOrientadores(); // Chama o modelo
+    echo json_encode($orientadores);
+}
+
+
+    public function enviarLinkRecuperacao() {
     $email = $_POST['email'] ?? '';
 
     $stmt = $this->pdo->prepare("SELECT id, nome FROM orientador WHERE email = :email");

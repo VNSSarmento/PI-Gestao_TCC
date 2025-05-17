@@ -34,17 +34,24 @@ switch ($rota) {
     case 'main_aluno':
         $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainOrientador();
         break;
+    case 'modal_add_usuario':
+        $controller->modalAddUsuario();
+          break;
     case 'logout':
         $controller->logout();
         break;
-
+    case 'cadastrarUser':
+        $controller->admCadastrarUser();
+        break;
     case 'main':
         $controller->main();
         break;
     case 'esqueci_senha':
         $controller->esqueciSenha();
     break;
-
+    case 'listar_orientadores':
+        $controller->listarOrientadores();
+    break;
     case 'enviar_link_recuperacao':
         $controller->enviarLinkRecuperacao();
     break;
