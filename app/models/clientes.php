@@ -35,6 +35,7 @@ public function autenticarProfessor($email, $senha) {
     $stmt->execute([':email' => $email]);
     $coordenador = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
     if ($coordenador && password_verify($senha, $coordenador['senha'])) {
         return ['status' => 'ok', 'user' => $coordenador, 'tipo' => 'coordenador'];
     }
@@ -45,6 +46,9 @@ public function autenticarProfessor($email, $senha) {
     $orientador = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($orientador && password_verify($senha, $orientador['senha'])) {
+        if (isset($orientador['ativo']) && !$orientador['ativo']) {
+            return ['status' => 'bloqueado']; // orientador está bloqueado
+            }
         return ['status' => 'ok', 'user' => $orientador, 'tipo' => 'orientador'];
     }
 
@@ -61,6 +65,9 @@ public function autenticarProfessor($email, $senha) {
 
         if ($aluno) {
             if (password_verify($senha, $aluno['senha'])) {
+                if (isset($aluno['ativo']) && !$aluno['ativo']) {
+                    return ['status' => 'bloqueado']; // aluno está bloqueado
+                     }
                 return ['status' => 'ok', 'user' => $aluno];
             } else {
                 return ['status' => 'senha_incorreta'];
@@ -93,6 +100,12 @@ public function autenticarProfessor($email, $senha) {
         $stmt->execute($aluno);
     }
 
+    public function admCadastroOrientador($prof) {
+        $sql = "INSERT INTO orientador (nome, email, faculdade, curso) VALUES (?, ?, ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($prof);
+    }
+
     public function buscarOrientadores() {
         $sql = "SELECT id, nome FROM orientador";
         $stmt = $this->pdo->query($sql);
@@ -114,6 +127,43 @@ public function autenticarProfessor($email, $senha) {
     return array_merge($orientadores, $alunos);
     }
 
+    public function listarAlunosParaBlock() {
+        $sql = "SELECT id, nome, ativo, 'aluno' AS tipo FROM aluno";
+        $stmt = $this->pdo->query($sql);
+        $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $alunos;
+    }
+
+    public function listarOrientadoresParaBlock() {
+        $sql = "SELECT id, nome, ativo, 'orientador' AS tipo FROM orientador";
+        $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+
+
+
+    public function atualizarUsuario($id, $tipo, $dados) {
+        $sql = "UPDATE $tipo SET nome = :nome, email = :email, faculdade = :faculdade, curso = :curso WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':nome' => $dados['nome'],
+            ':email' => $dados['email'],
+            ':faculdade' => $dados['faculdade'],
+            ':curso' => $dados['curso'],
+            ':id' => $id
+        ]);
+    }
+
+    public function alterarStatus($id, $tipo, $ativo) {
+        $sql = "UPDATE $tipo SET ativo = :ativo WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':ativo' => $ativo,
+            ':id' => $id
+        ]);
+    }
 
 
 }

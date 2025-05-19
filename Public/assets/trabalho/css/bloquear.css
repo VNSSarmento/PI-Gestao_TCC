@@ -1,0 +1,170 @@
+.modal_block_main {
+ 
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+
+.modal_block_header {
+  background-color: #46869D;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  color: #fff;
+}
+
+
+.modal_block_usuario_title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal_block_img {
+  width: 50px;
+  height: 50px;
+}
+
+.modal_block_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.modal_block_seta {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.modal_block_seta img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.modal_block_pesquisa {
+  background-color: rgb(238, 237, 237);
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+}
+
+.modal_block_pesquisa input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 16px;
+  background: transparent;
+}
+
+.modal_block_lupa {
+  width: 20px;
+  height: 30px;
+}
+
+.modal_block_lupa img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.modal_block_lista_wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.modal_block_lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+}
+
+.modal_block_usuario {
+  background-color: white;
+  padding: 16px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal_block_usuario_info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+}
+
+.modal_block_usuario_info img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.modal_block_nome {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap;
+}
+
+.modal_block_acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.modal_block_botao_azul,
+.modal_block_botao_vermelho {
+  border-radius: 50px;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.modal_block_botao_azul {
+  background-color: #5166AB;
+}
+
+.modal_block_botao_vermelho {
+  background-color: #D22E2E;
+}
+
+.modal_block_botao_azul:hover,
+.modal_block_botao_vermelho:hover {
+  opacity: 0.9;
+}
+
+/* Scrollbar */
+.modal_block_lista_wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal_block_lista_wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.modal_block_lista_wrapper::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.modal_block_lista_wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

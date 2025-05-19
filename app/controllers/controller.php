@@ -45,6 +45,30 @@ class controller {
         include __DIR__. '/../views/telas/particional/add_usuario_modal.php';
     }
 
+    public function modalBlockUsuario() {
+        // 1. Carregar todos os usuários (alunos e orientadores, por exemplo)
+        $alunos = $this->user->listarAlunosParaBlock(); // você precisa criar esse método se não existir
+        $orientadores = $this->user->listarOrientadoresParaBlock(); // idem
+
+        // 2. Juntar todos em um só array e marcar o tipo
+        $usuarios = [];
+
+        foreach ($alunos as $a) {
+            $a['tipo'] = 'aluno';  // marca o tipo manualmente
+            $usuarios[] = $a;
+        }
+
+        foreach ($orientadores as $o) {
+            $o['tipo'] = 'orientador';  // marca o tipo manualmente
+            $usuarios[] = $o;
+        }
+
+        // 3. Carregar a view passando a variável corretamente
+    require 'app/views/telas/particional/bloquear_usuario.php';
+}
+
+
+
 
     public function mainCoordenador() {
     session_start();
@@ -154,25 +178,30 @@ public function loginAluno() {
         }
     }
 
-    public function admCadastrarUser() {
-        $tipo = $_POST['tipo_usuario'] ?? '';
-        $nome = $_POST['nome'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $faculdade = $_POST['faculdade'] ?? '';
-        $curso = $_POST['curso'] ?? '';
-        $orientador_id = $_POST['orientador_id'] ?? null;
+public function admCadastrarUser() {
+    $tipo = $_POST['tipo_usuario'] ?? '';
+    $nome = $_POST['nome'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $faculdade = $_POST['faculdade'] ?? '';
+    $curso = $_POST['curso'] ?? '';
 
-    if ($tipo === 'orientando') {
-        if (empty($orientador_id)) {
-            echo 'Erro: orientador não selecionado.';
-            return;
-        }
+        if ($tipo === 'orientando') {
+            $orientador_id = $_POST['orientador_id'] ?? null;
+                if (empty($orientador_id)) {
+                    echo 'Erro: orientador não selecionado.';
+                    return;
+            }
 
         $aluno = [$nome, $email, $faculdade, $curso, $orientador_id];
         $this->user->admCadastroAluno($aluno);
         echo 'Aluno cadastrado com sucesso!';
-    } else {
-        // Aqui você pode tratar os outros tipos se quiser
+    } 
+    else if ($tipo === 'orientador') {
+        $prof = [$nome, $email, $faculdade, $curso];
+        $this->user->admCadastroOrientador($prof); // corrigido
+        echo 'Orientador cadastrado com sucesso!';
+    } 
+    else {
         echo 'Tipo de usuário não suportado para cadastro.';
     }
 }
@@ -183,6 +212,32 @@ public function loginAluno() {
         $orientadores = $this->user->buscarOrientadores(); // Chama o modelo
     echo json_encode($orientadores);
 }
+
+public function atualizarUsuario() {
+    $id = $_POST['id'];
+    $tipo = $_POST['tipo'];
+
+    $dados = [
+        'nome' => $_POST['nome'],
+        'email' => $_POST['email'],
+        'faculdade' => $_POST['faculdade'],
+        'curso' => $_POST['curso']
+    ];
+
+    $this->user->atualizarUsuario($id, $tipo, $dados);
+    echo 'Atualizado com sucesso!';
+}
+
+public function alterarStatusUsuario() {
+    $id = $_POST['id'];
+    $tipo = $_POST['tipo']; 
+    $novoStatus = $_POST['ativo'] ? 0 : 1;
+
+    $this->user->alterarStatus($id, $tipo, $novoStatus);
+    echo 'Status atualizado.';
+    }
+
+
 
 
     public function enviarLinkRecuperacao() {

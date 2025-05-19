@@ -27,7 +27,7 @@
             <li><button onclick="">Meu Perfil</button></li>
             <li><button onclick="">Etapas do TCC</button></li>
             <li><button onclick="">Chat</button></li>
-            <a href="/?rota=logout"><li><button onclick="">Fazer LogOut</button></li></a> 
+            <a href="/?rota=logout"><li><button class="Blogout" onclick="">Fazer logout</button></li></a> 
           </ul>
         </nav>
       </section>
@@ -59,9 +59,9 @@
 
           <div class="card_acao">
             <div class="icone_acao">
-              <img src="/img/pngtree-user-vector-avatar-png-image_1541962-removebg-preview.png" alt="Bloquear usuário">
+              <img src="/Public/assets/trabalho/imagens/funcao-do-usuario.png" alt="Bloquear usuário">
             </div>
-           <button class="botao_acao" onclick="abrirModalComConteudo('/views/telas/particional/add_usuario_modal.php')">Adicionar Usuário</button>
+           <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=modal_block_usuario')">Configurar Usuário</button>
           </div>
         </div>
       </main>

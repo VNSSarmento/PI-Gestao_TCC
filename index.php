@@ -36,7 +36,10 @@ switch ($rota) {
         break;
     case 'modal_add_usuario':
         $controller->modalAddUsuario();
-          break;
+        break;
+    case 'modal_block_usuario':
+        $controller->modalBlockUsuario();
+        break;
     case 'logout':
         $controller->logout();
         break;
@@ -48,20 +51,20 @@ switch ($rota) {
         break;
     case 'esqueci_senha':
         $controller->esqueciSenha();
-    break;
+       break;
     case 'listar_orientadores':
         $controller->listarOrientadores();
-    break;
+        break;
     case 'enviar_link_recuperacao':
         $controller->enviarLinkRecuperacao();
     break;
     case 'nova_senha':
         $controller->formNovaSenha();
-    break;
+        break;
 
 case 'atualizar_senha':
         $controller->atualizarSenha();
-    break;
+        break;
     default:
         echo "Página não encontrada.";
         break;

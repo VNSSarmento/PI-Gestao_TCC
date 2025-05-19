@@ -1,8 +1,18 @@
-https://desenvolvermvc.com.br/cuso/edit/4
-index - quando carrega o controller e nao passo o metodo
-show - quando quero pegar um registro especifico 
-edit - mostrar formulario para atualizar registro
-update - atualiza o registro do banco
-create - mostra o formulario para cadastrar um registro
-store - cadastrar registro no banco
-destroy - deletar registro do banco ou logout do sistema
+fazer Git
+
+git status
+
+git add .
+
+git add C:\Users\sarme\OneDrive\Documentos\PI
+
+git commit -m "Descrição curta e clara do que você alterou, ex: 'Corrigido tipo de usuário para exibir Aluno' "
+
+git push origin main
+
+para subir rapido:
+
+git add .
+git commit -m "Sua mensagem"
+git push origin main
+
