@@ -25,14 +25,11 @@ switch ($rota) {
     case 'tela_inicial_coordenador':
         $controller->mainCoordenador();
     break;  
-    case 'loginAluno':
-        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginAluno() : $controller->telaloginAluno();
-        break;
     case 'telaloginAluno':
         $controller->telaloginAluno();
         break;
     case 'main_aluno':
-        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginOrientador() : $controller->mainOrientador();
+        $_SERVER['REQUEST_METHOD'] === 'POST' ? $controller->loginAluno() : $controller->mainAluno();
         break;
     case 'modal_add_usuario':
         $controller->modalAddUsuario();
@@ -55,13 +52,18 @@ switch ($rota) {
     case 'listar_orientadores':
         $controller->listarOrientadores();
         break;
+    case 'bloquear_usuarios':
+        if (isset($_GET['rota']) && $_GET['rota'] === 'bloquear_usuarios') {
+        $controller->bloquearUsuarios();
+        exit;  
+        }
+        break;
     case 'enviar_link_recuperacao':
         $controller->enviarLinkRecuperacao();
     break;
     case 'nova_senha':
         $controller->formNovaSenha();
         break;
-
 case 'atualizar_senha':
         $controller->atualizarSenha();
         break;

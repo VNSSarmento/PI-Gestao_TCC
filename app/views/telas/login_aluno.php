@@ -10,14 +10,14 @@
         <div class="login-container">
             <div class="login-box">
                 <h1>Login do aluno</h1>
-                <form action="/?rota=loginAluno" method="POST">
+                <form action="index.php?rota=main_aluno" method="POST">
                     <div class="input-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" required value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>">
                     </div>
                     <div class="input-group">
                         <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" required>
+                        <input type="password" id="password" name="senha" required>
                          <?php if (!empty($erro)): ?>
                                <p style="color: red;"><?php echo $erro; ?></p>
                            <?php endif; ?>

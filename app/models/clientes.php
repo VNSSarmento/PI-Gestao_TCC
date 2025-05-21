@@ -35,9 +35,15 @@ public function autenticarProfessor($email, $senha) {
     $stmt->execute([':email' => $email]);
     $coordenador = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-    if ($coordenador && password_verify($senha, $coordenador['senha'])) {
-        return ['status' => 'ok', 'user' => $coordenador, 'tipo' => 'coordenador'];
+    if ($coordenador) {
+        if (isset($coordenador['ativo']) && !$coordenador['ativo']) {
+            return ['status' => 'bloqueado'];
+        }
+        if (password_verify($senha, $coordenador['senha'])) {
+            return ['status' => 'ok', 'user' => $coordenador, 'tipo' => 'coordenador'];
+        } else {
+            return ['status' => 'senha_incorreta'];
+        }
     }
 
     $sql = "SELECT * FROM orientador WHERE email = :email";
@@ -45,47 +51,57 @@ public function autenticarProfessor($email, $senha) {
     $stmt->execute([':email' => $email]);
     $orientador = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($orientador && password_verify($senha, $orientador['senha'])) {
+    if ($orientador) {
         if (isset($orientador['ativo']) && !$orientador['ativo']) {
-            return ['status' => 'bloqueado']; // orientador está bloqueado
-            }
-        return ['status' => 'ok', 'user' => $orientador, 'tipo' => 'orientador'];
+            return ['status' => 'bloqueado']; 
+        if (password_verify($senha, $orientador['senha'])) {
+            return ['status' => 'ok', 'user' => $orientador, 'tipo' => 'orientador'];
+        } else {
+            return ['status' => 'senha_incorreta'];
+        }
     }
 
-    return ['status' => 'erro'];
+
+    return ['status' => 'email_nao_encontrado'];
+    }
 }
 
 
-    public function autenticarAluno($email, $senha) {
 
-        $sql = "SELECT * FROM aluno WHERE email = :email";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':email' => $email]);
-        $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
+public function autenticarAluno($email, $senha) {
+    // 1. Verifica se o aluno existe
+    $sql = "SELECT * FROM aluno WHERE email = :email";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':email' => $email]);
+    $aluno = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($aluno) {
-            if (password_verify($senha, $aluno['senha'])) {
-                if (isset($aluno['ativo']) && !$aluno['ativo']) {
-                    return ['status' => 'bloqueado']; // aluno está bloqueado
-                     }
-                return ['status' => 'ok', 'user' => $aluno];
-            } else {
-                return ['status' => 'senha_incorreta'];
-            }
+    if ($aluno) {
+
+        if (isset($aluno['ativo']) && !$aluno['ativo']) {
+            return ['status' => 'Usuario_block'];
         }
 
-        $sql = "SELECT * FROM orientador WHERE email = :email";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':email' => $email]);
-        $prof = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($prof) {
-            return ['status' => 'email_eh_prof'];
+        // 3. Verifica a senha
+        if (password_verify($senha, $aluno['senha'])) {
+            return ['status' => 'ok', 'user' => $aluno];
+        } else {
+            return ['status' => 'senha_incorreta'];
         }
-
-        // 3. E-mail não encontrado
-        return ['status' => 'email_nao_encontrado'];
     }
+
+    // 4. Verifica se o e-mail é de orientador
+    $sql = "SELECT * FROM orientador WHERE email = :email";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':email' => $email]);
+    $prof = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($prof) {
+        return ['status' => 'email_eh_prof'];
+    }
+
+    // 5. E-mail não encontrado
+    return ['status' => 'email_nao_encontrado'];
+}
 
     public function buscarAlunosDoOrientador($orientadorId) {
         $sql = "SELECT nome FROM aluno WHERE id_orientador = :id_orientador";
@@ -94,9 +110,22 @@ public function autenticarProfessor($email, $senha) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function buscarOrientadorDoAluno($alunoId) {
+    $sql = "SELECT o.nome 
+            FROM orientador o
+            INNER JOIN aluno a ON a.id_orientador = o.id
+            WHERE a.id = :alunoId";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':alunoId' => $alunoId]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
     public function admCadastroAluno($aluno) {
-        $sql = "INSERT INTO aluno (nome, email, faculdade, curso, id_orientador) VALUES (?, ?, ?, ?, ?)";
+        $senha = password_hash($aluno[1], PASSWORD_DEFAULT);
+        $sql = "INSERT INTO aluno (nome, email, faculdade, curso, id_orientador, senha) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
+        $aluno[] = $senha;
         $stmt->execute($aluno);
     }
 
@@ -140,9 +169,17 @@ public function autenticarProfessor($email, $senha) {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function atualizarBloqueioUser($id, $tipo, $status) {
+        $tabela = $tipo === 'aluno' ? 'aluno' : 'orientador';
 
+        $sql = "UPDATE $tabela SET ativo = :status WHERE id = :id";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':status', $status, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 
-
+        return $stmt->execute();
+    }
 
     public function atualizarUsuario($id, $tipo, $dados) {
         $sql = "UPDATE $tipo SET nome = :nome, email = :email, faculdade = :faculdade, curso = :curso WHERE id = :id";

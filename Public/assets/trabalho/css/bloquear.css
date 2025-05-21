@@ -1,5 +1,4 @@
 .modal_block_main {
- 
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -7,8 +6,6 @@
   flex-direction: column;
   gap: 10px;
 }
-
-
 
 .modal_block_header {
   background-color: #46869D;
@@ -18,7 +15,6 @@
   padding: 0 10px;
   color: #fff;
 }
-
 
 .modal_block_usuario_title {
   display: flex;
@@ -93,6 +89,7 @@
   padding: 0;
 }
 
+
 .modal_block_usuario {
   background-color: white;
   padding: 16px;
@@ -150,7 +147,6 @@
   opacity: 0.9;
 }
 
-/* Scrollbar */
 .modal_block_lista_wrapper::-webkit-scrollbar {
   width: 8px;
 }
@@ -167,4 +163,15 @@
 
 .modal_block_lista_wrapper::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.botao_verde {
+  border-radius: 50px;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  background-color: #28a745 !important; /* Verde bonito */
 }

@@ -1,18 +1,10 @@
 fazer Git
 
-git status
-
 git add .
 
-git add C:\Users\sarme\OneDrive\Documentos\PI
+git commit -m "Descreva aqui o que foi alterado"
 
-git commit -m "Descrição curta e clara do que você alterou, ex: 'Corrigido tipo de usuário para exibir Aluno' "
+git push
 
-git push origin main
-
-para subir rapido:
-
-git add .
-git commit -m "Sua mensagem"
-git push origin main
-
+git push origin nome-da-branch
+(exemplo: git push origin main)

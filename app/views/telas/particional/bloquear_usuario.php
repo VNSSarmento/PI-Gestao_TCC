@@ -25,69 +25,90 @@
                 <div class="modal_block_lupa">
                     <img src="/img/lupa.png" alt="">
                 </div>
-                <input type="text" placeholder="Digite o nome do usuário">
+               <input type="text" id="campoPesquisa" placeholder="Digite o nome do usuário">
         </section>
 
         <section class="modal_block_lista_wrapper" aria-label="Lista de usuarios">
-            <ul class="modal_block_lista">
-                <?php foreach ($usuarios as $usuario): ?>
-                    <li class="modal_block_usuario" data-id="<?= $usuario['id'] ?>" data-tipo="<?= $usuario['tipo'] ?>">
+            <ul class="colaborador_lista" id="listaColaboradores" >
+                 <?php foreach ($colaboradores as $colab): ?>
+                    <li class="colaborador_item" data-id="<?= $colab['id'] ?>" data-tipo="<?= $colab['tipo'] ?>">
                         <div class="modal_block_usuario_info">
                             <img src="/img/pngtree-user-vector-avatar-png-image_1541962-removebg-preview.png" alt="">
-                            <div>
-                                <p class="modal_block_nome"><?= htmlspecialchars($usuario['nome']) ?></p>
-                                <p class="colaborador_lista"><?= ucfirst($usuario['tipo']) ?></p> <!-- AQUI MOSTRA O TIPO -->
-                            </div>
+                            <span class="nome"><?= htmlspecialchars($colab['nome']) ?></span>
+                            <span class="tipo"><?= htmlspecialchars($colab['tipo'] === 'Orientando' ? 'Aluno' : ucfirst($colab['tipo'])) ?></span>
                         </div>
                         <div class="modal_block_acoes">
-                            <button class="modal_block_botao_azul"
-                                type="button"
-                                onclick="toggleStatusUsuario(<?= $usuario['id'] ?>, <?= $usuario['ativo'] ? 'true' : 'false' ?>, '<?= $usuario['tipo'] ?>')">
-                                <?= $usuario['ativo'] ? 'Bloquear' : 'Desbloquear' ?>
+                            <button class="btn-bloquear <?= $colab['ativo'] ? 'modal_block_botao_vermelho' : 'botao_verde' ?>" type="button">
+                                <?= $colab['ativo'] ? 'Bloquear' : 'Desbloquear' ?>
                             </button>
-                            <button class="modal_block_botao_vermelho"
-                                type="button"
-                                onclick="abrirEdicaoUsuario(<?= $usuario['id'] ?>, '<?= $usuario['tipo'] ?>')">
-                                Alterar
-                            </button>
+                            <button class="modal_block_botao_azul" type="button">Alterar</button>
                         </div>
                     </li>
                 <?php endforeach; ?>
 
             </ul>
-
         </section>
     </main>
-<script>
-// === BLOQUEAR/DESBLOQUEAR USUÁRIO VIA AJAX ===
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.modal_block_botao_azul').forEach(button => {
-    button.addEventListener('click', () => {
-      const li = button.closest('.modal_block_usuario');
-      const userId = li.dataset.id;
-      const tipoUsuario = li.dataset.tipo;
-      const novoStatus = button.textContent.trim() === 'Bloquear' ? 0 : 1;
 
-      fetch('/?rota=alterarStatusUsuario', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: `usuario_id=${userId}&tipo_usuario=${tipoUsuario}&novo_status=${novoStatus}`
-      })
-      .then(res => res.text())
-      .then(res => {
-        if (res.trim() === 'ok') {
-          button.textContent = novoStatus === 0 ? 'Desbloquear' : 'Bloquear';
-          alert('Status atualizado com sucesso!');
-        } else {
-          alert('Erro ao atualizar status: ' + res);
-        }
-      })
-      .catch(err => alert('Erro AJAX: ' + err));
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('campoPesquisa');
+  const lista = document.getElementById('listaColaboradores');
+  const todosLi = Array.from(lista.querySelectorAll('.colaborador_item')); // <- corrigido aqui
+
+
+  input.addEventListener('input', function () {
+    const termo = input.value.trim().toLowerCase();
+
+    todosLi.forEach(li => {
+      const nome = li.querySelector('.nome').textContent.toLowerCase();
+      const tipo = li.querySelector('.tipo').textContent.toLowerCase();
+
+      const deveMostrar = nome.includes(termo) || tipo.includes(termo);
+      li.style.display = deveMostrar ? 'flex' : 'none';
     });
   });
 });
+
+ document.querySelectorAll('.btn-bloquear').forEach(function(botao) {
+        botao.addEventListener('click', function () {
+            const item = botao.closest('.colaborador_item');
+            const id = item.dataset.id;
+            const tipo = item.dataset.tipo;
+            const estaBloqueado = botao.classList.contains('modal_block_botao_vermelho');
+            const novoStatus = estaBloqueado ? 0 : 1;
+
+            // Atualiza visualmente
+            if (estaBloqueado) {
+                botao.classList.remove('modal_block_botao_vermelho');
+                botao.classList.add('botao_verde');
+                botao.textContent = 'Desbloquear';
+            } else {
+                botao.classList.remove('botao_verde');
+                botao.classList.add('modal_block_botao_vermelho');
+                botao.textContent = 'Bloquear';
+            }
+
+            // Envia para o backend
+              fetch('/?rota=bloquear_usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${id}&tipo=${tipo}&ativo=${novoStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.sucesso) {
+                    alert("Erro ao atualizar status.");
+                }
+            })
+            .catch(() => {
+                alert("Erro na requisição.");
+            });
+        });
+    });
 </script>
 
 </body>

@@ -10,7 +10,7 @@ class controller {
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
-        $this->user = new user($pdo);
+        $this->user = new User($pdo);
     }
 
     public function telaCoordenador(){
@@ -26,6 +26,10 @@ class controller {
     }
      public function telaloginProfessor() {
         include __DIR__.'/../views/telas/login_professor.php';
+    }
+
+     public function main_aluno() {
+        include __DIR__.'/../views/telas/main_aluno.php';
     }
 
     public function mostrarCadastro() {
@@ -45,32 +49,29 @@ class controller {
         include __DIR__. '/../views/telas/particional/add_usuario_modal.php';
     }
 
-    public function modalBlockUsuario() {
+public function modalBlockUsuario() {
         // 1. Carregar todos os usuários (alunos e orientadores, por exemplo)
         $alunos = $this->user->listarAlunosParaBlock(); // você precisa criar esse método se não existir
         $orientadores = $this->user->listarOrientadoresParaBlock(); // idem
 
         // 2. Juntar todos em um só array e marcar o tipo
-        $usuarios = [];
+        $colaboradores = [];
 
         foreach ($alunos as $a) {
             $a['tipo'] = 'aluno';  // marca o tipo manualmente
-            $usuarios[] = $a;
+            $colaboradores[] = $a;
         }
 
         foreach ($orientadores as $o) {
             $o['tipo'] = 'orientador';  // marca o tipo manualmente
-            $usuarios[] = $o;
+            $colaboradores[] = $o;
         }
 
         // 3. Carregar a view passando a variável corretamente
     require 'app/views/telas/particional/bloquear_usuario.php';
 }
 
-
-
-
-    public function mainCoordenador() {
+public function mainCoordenador() {
     session_start();
     if (!isset($_SESSION['cliente_id'])) {
         header("Location: /?rota=telaloginProfessor");
@@ -84,7 +85,7 @@ class controller {
     }
     
     
-    public function mainOrientador() {
+public function mainOrientador() {
         session_start();
         if (!isset($_SESSION['cliente_id'])) {
             header("Location: /?rota=telaloginProfessor");
@@ -103,7 +104,27 @@ class controller {
         include __DIR__ . '/../views/telas/main_orientador.php';
     }
 
-    public function logout() {
+public function mainAluno() {
+       session_start();
+    if (!isset($_SESSION['cliente_id'])) {
+        header("Location: /?rota=telaloginAluno");
+        exit;
+    }
+
+    $id = $_SESSION['cliente_id'];
+
+    $stmt = $this->pdo->prepare("SELECT * FROM aluno WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $alunoId = $_SESSION['cliente_id']; // ou onde você guardar o ID do orientador
+
+    $orientador = $this->user->buscarOrientadorDoAluno($alunoId);
+
+    include __DIR__ . '/../views/telas/main_aluno.php';
+}
+
+public function logout() {
     session_start();
     session_destroy();
     header("Location: /?rota=main");
@@ -162,6 +183,9 @@ public function loginAluno() {
             case 'senha_incorreta':
                 $erro = "Senha incorreta.";
                 break;
+            case 'Usuario_block':
+                $erro = "Usuario Bloqueado.";
+                break;
 
             case 'email_eh_prof':
                 $erro = "Email invalido.";
@@ -172,7 +196,7 @@ public function loginAluno() {
                 break;
         }
 
-        include __DIR__ . '/../views/telas/login_Aluno.php';
+        include __DIR__ . '/../views/telas/login_aluno.php';
     } else {
         include __DIR__ . '/../views/telas/login_aluno.php';
         }
@@ -207,7 +231,7 @@ public function admCadastrarUser() {
 }
 
 
-    public function listarOrientadores() {
+public function listarOrientadores() {
     header('Content-Type: application/json');
         $orientadores = $this->user->buscarOrientadores(); // Chama o modelo
     echo json_encode($orientadores);
@@ -228,17 +252,32 @@ public function atualizarUsuario() {
     echo 'Atualizado com sucesso!';
 }
 
-public function alterarStatusUsuario() {
-    $id = $_POST['id'];
-    $tipo = $_POST['tipo']; 
-    $novoStatus = $_POST['ativo'] ? 0 : 1;
+public function bloquearUsuarios() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['erro' => 'Método não permitido']);
+            return;
+        }
 
-    $this->user->alterarStatus($id, $tipo, $novoStatus);
-    echo 'Status atualizado.';
+        $id = $_POST['id'] ?? null;
+        $tipo = $_POST['tipo'] ?? null;
+        $status = $_POST['ativo'] ?? null;
+
+        if (!$id || !$tipo || !isset($status)) {
+            http_response_code(400);
+            echo json_encode(['erro' => 'Dados incompletos.']);
+            return;
+        }
+
+    $resultado = $this->user->atualizarBloqueioUser($id, $tipo, $status);
+    file_put_contents('log_update.txt', $resultado ? 'Update OK' : 'Update falhou');
+        if ($resultado) {
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Usuário bloqueado com sucesso']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['erro' => 'Erro ao atualizar.']);
+        }
     }
-
-
-
 
     public function enviarLinkRecuperacao() {
     $email = $_POST['email'] ?? '';
@@ -277,8 +316,6 @@ public function alterarStatusUsuario() {
         echo "E-mail não encontrado.";
     }
 }
-
-
 
     public function formNovaSenha() {
         $token = $_GET['token'] ?? '';

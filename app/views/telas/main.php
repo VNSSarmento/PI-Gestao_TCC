@@ -14,7 +14,7 @@
         <div class="container">
             
             <figure class="card">
-                <a href="/?rota=loginAluno">
+                <a href="/?rota=telaloginAluno">
                 <img src="/Public/assets/trabalho/imagens/aluno.svg" alt="Aluno" class="profile-image">
                 <button class="btn">ALUNO</button>
                 </a>
