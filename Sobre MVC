@@ -1,5 +1,7 @@
 fazer Git
 
+git status
+
 git add .
 
 git commit -m "Descreva aqui o que foi alterado"

@@ -1,0 +1,142 @@
+:root {
+    --primary-color: #3f8792;
+    --secondary-color: #4B7F96;
+    --background-light: #ECF9F7;
+    --text-dark: #333333;
+    --text-medium: #555555;
+    --text-light: #777777;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-light);
+}
+
+.container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    width: 100%;
+    max-width: 450px;
+    margin: 40px auto;
+}
+
+h1 {
+    color: var(--text-dark);
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: normal;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dde4ec;
+}
+
+.file-selection {
+    margin-bottom: 20px;
+}
+
+.file-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.file-name {
+    color: var(--text-dark);
+    padding: 5px 0;
+    display: block;
+    font-size: 14px;
+}
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    width: 100%;
+    transition: background-color 0.2s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.submit-btn:hover {
+    background-color: #40a0a7;
+    transform: translateY(-1px);
+}
+
+#file-input {
+    display: none;
+}
+
+.file-select-button {
+    color: var(--primary-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 13px;
+    margin-top: 5px;
+    display: none;
+}
+
+.entrega {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.entrega label {
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.entrega input[type="date"] {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9fbfc;
+    color: var(--text-dark);
+}
+
+.comentario {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comentario label {
+    font-size: 15px;
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.comentario textarea {
+    padding: 10px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: var(--text-dark);
+    resize: none;
+    margin: 0 auto;
+}
+

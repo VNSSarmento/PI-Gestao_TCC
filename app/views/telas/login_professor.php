@@ -23,7 +23,7 @@
                            <?php endif; ?>
                     </div>
                     <button type="submit" class="login-btn">Fazer login</button>
-                    <a href="/?rota=esqueciSenha" class="forgot-password">Esqueceu a senha?</a>
+                    <a href="/?rota=esqueci_senha" class="forgot-password">Esqueceu a senha?</a>
                 </form>
                 <a href="/?rota=main" class="backmain">
                         Voltar para Inicio

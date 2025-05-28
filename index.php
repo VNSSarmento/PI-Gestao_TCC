@@ -24,7 +24,7 @@ switch ($rota) {
         break;
     case 'tela_inicial_coordenador':
         $controller->mainCoordenador();
-    break;  
+        break;  
     case 'telaloginAluno':
         $controller->telaloginAluno();
         break;
@@ -33,6 +33,9 @@ switch ($rota) {
         break;
     case 'modal_add_usuario':
         $controller->modalAddUsuario();
+        break;
+    case 'modal_anexar_doc':
+        $controller->modalAnexarDoc();
         break;
     case 'modal_block_usuario':
         $controller->modalBlockUsuario();
@@ -60,12 +63,15 @@ switch ($rota) {
         break;
     case 'enviar_link_recuperacao':
         $controller->enviarLinkRecuperacao();
-    break;
+        break;
     case 'nova_senha':
         $controller->formNovaSenha();
         break;
-case 'atualizar_senha':
+    case 'atualizar_senha':
         $controller->atualizarSenha();
+        break;
+    case 'salvar_anexo':
+        $controller->salvarAnexo();
         break;
     default:
         echo "Página não encontrada.";

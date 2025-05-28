@@ -1,12 +1,13 @@
 <?php
 class User {
     private $pdo;
+ //   public $tipo_user;
 
     public function __construct($pdo) {
         $this->pdo = $pdo;
     }
 
-public function buscarPorId($id) {
+    public function buscarPorId($id) {
 
     $sql = "SELECT * FROM coordenador WHERE id = :id";
     $stmt = $this->pdo->prepare($sql);
@@ -26,10 +27,9 @@ public function buscarPorId($id) {
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([':id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC); // Pode retornar false se não achar
-}
+    }
 
-public function autenticarProfessor($email, $senha) {
-
+    public function autenticarProfessor($email, $senha) {
     $sql = "SELECT * FROM coordenador WHERE email = :email";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([':email' => $email]);
@@ -40,6 +40,7 @@ public function autenticarProfessor($email, $senha) {
             return ['status' => 'bloqueado'];
         }
         if (password_verify($senha, $coordenador['senha'])) {
+ //           $this->tipo_user = 'Coordenador';
             return ['status' => 'ok', 'user' => $coordenador, 'tipo' => 'coordenador'];
         } else {
             return ['status' => 'senha_incorreta'];
@@ -53,23 +54,22 @@ public function autenticarProfessor($email, $senha) {
 
     if ($orientador) {
         if (isset($orientador['ativo']) && !$orientador['ativo']) {
-            return ['status' => 'bloqueado']; 
+            return ['status' => 'bloqueado'];
+        }
         if (password_verify($senha, $orientador['senha'])) {
+ //           $this->tipo_user = 'Orientador';
             return ['status' => 'ok', 'user' => $orientador, 'tipo' => 'orientador'];
         } else {
             return ['status' => 'senha_incorreta'];
         }
     }
 
-
-    return ['status' => 'email_nao_encontrado'];
+    return ['status' => 'nao_encontrado'];
     }
-}
 
 
+    public function autenticarAluno($email, $senha) {
 
-public function autenticarAluno($email, $senha) {
-    // 1. Verifica se o aluno existe
     $sql = "SELECT * FROM aluno WHERE email = :email";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([':email' => $email]);
@@ -83,6 +83,7 @@ public function autenticarAluno($email, $senha) {
 
         // 3. Verifica a senha
         if (password_verify($senha, $aluno['senha'])) {
+ //           $this->tipo_user = 'Aluno';
             return ['status' => 'ok', 'user' => $aluno];
         } else {
             return ['status' => 'senha_incorreta'];
@@ -101,10 +102,10 @@ public function autenticarAluno($email, $senha) {
 
     // 5. E-mail não encontrado
     return ['status' => 'email_nao_encontrado'];
-}
+    }
 
     public function buscarAlunosDoOrientador($orientadorId) {
-        $sql = "SELECT nome FROM aluno WHERE id_orientador = :id_orientador";
+        $sql = "SELECT id,nome FROM aluno WHERE id_orientador = :id_orientador";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id_orientador' => $orientadorId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -130,8 +131,10 @@ public function autenticarAluno($email, $senha) {
     }
 
     public function admCadastroOrientador($prof) {
-        $sql = "INSERT INTO orientador (nome, email, faculdade, curso) VALUES (?, ?, ?, ?)";
+        $senha = password_hash($prof[1], PASSWORD_DEFAULT);
+        $sql = "INSERT INTO orientador (nome, email, faculdade, curso, senha) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
+        $prof[] = $senha;
         $stmt->execute($prof);
     }
 
@@ -200,6 +203,27 @@ public function autenticarAluno($email, $senha) {
             ':ativo' => $ativo,
             ':id' => $id
         ]);
+    }
+
+    public function salvarDocumentoNoBanco($dados){
+        $sql = "INSERT INTO anexos (id_aluno, tipo_remetente, nome_remetente, descricao, caminho_arquivo, comentario, data_envio, prazo_entrega) 
+                VALUES (:id_aluno, :tipo_remetente, :nome_remetente, :descricao, :caminho_arquivo, :comentario, :data_envio, :prazo_entrega)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($dados);
+    }
+
+    public function buscarDocumentosPorAluno($idAluno) {
+        $sql = "SELECT * FROM documentos WHERE id_aluno = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $idAluno]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarNomeAluno($idAluno) {
+    $stmt = $this->pdo->prepare("SELECT nome FROM aluno WHERE id = :id");
+    $stmt->execute(['id' => $idAluno]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row ? $row['nome'] : null;
     }
 
 

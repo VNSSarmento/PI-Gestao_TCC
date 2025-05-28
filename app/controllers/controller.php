@@ -41,6 +41,12 @@ class controller {
         include __DIR__ . '/../views/telas/recuperar_senha.php';
     }
 
+    public function modalAnexarDoc() {
+         session_start();
+        var_dump($_SESSION);
+    include __DIR__. '/../views/telas/particional/anexar_documento.php';
+    }
+
     public function cadastrarUser(){
         include __DIR__.'/../views/telas/add.adm.php';
     }
@@ -48,6 +54,7 @@ class controller {
     public function modalAddUsuario() {
         include __DIR__. '/../views/telas/particional/add_usuario_modal.php';
     }
+
 
 public function modalBlockUsuario() {
         // 1. Carregar todos os usuários (alunos e orientadores, por exemplo)
@@ -97,7 +104,7 @@ public function mainOrientador() {
         $stmt->execute([':id' => $id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $orientadorId = $_SESSION['cliente_id']; // ou onde você guardar o ID do orientador
+        $orientadorId = $_SESSION['cliente_id'];
 
         $alunos = $this->user->buscarAlunosDoOrientador($orientadorId);
 
@@ -138,7 +145,7 @@ public function logout() {
 
         $resultado = $this->user->autenticarProfessor($email, $senha);
 
-   if ($resultado['status'] === 'ok') {
+        if (is_array($resultado) && isset($resultado['status']) && $resultado['status'] === 'ok') {
             session_start();
             $_SESSION['cliente_id'] = $resultado['user']['id'];
             $_SESSION['cliente_nome'] = $resultado['user']['nome'];
@@ -279,7 +286,7 @@ public function bloquearUsuarios() {
         }
     }
 
-    public function enviarLinkRecuperacao() {
+public function enviarLinkRecuperacao() {
     $email = $_POST['email'] ?? '';
 
     $stmt = $this->pdo->prepare("SELECT id, nome FROM orientador WHERE email = :email");
@@ -317,7 +324,7 @@ public function bloquearUsuarios() {
     }
 }
 
-    public function formNovaSenha() {
+public function formNovaSenha() {
         $token = $_GET['token'] ?? '';
         $tipo = $_GET['tipo'] ?? '';
 
@@ -340,7 +347,7 @@ public function bloquearUsuarios() {
             }
     }
 
-    public function atualizarSenha() {
+public function atualizarSenha() {
             $token = $_POST['token'] ?? '';
             $tipo = $_POST['tipo'] ?? '';
             $novaSenha = password_hash($_POST['nova_senha'], PASSWORD_DEFAULT);
@@ -358,6 +365,91 @@ public function bloquearUsuarios() {
 
             echo "Senha atualizada com sucesso. <a href='/?rota=loginProfessor'>Fazer login</a>";
     }
+
+public function documentosAluno() {
+    if (!isset($_GET['id'])) {
+        echo "ID do aluno não fornecido.";
+        return;
+    }
+
+    $idAluno = (int)$_GET['id'];
+
+    $documentos = $this->user->buscarDocumentosPorAluno($idAluno);
+    $nomeAluno = $this->user->buscarNomeAluno($idAluno);
+
+    $user = $_SESSION['user'] ?? ['nome' => 'Professor'];
+
+    include 'app/views/telas/particional/documento_aluno.php';
+}
+
+public function anexarDocumento() {
+    session_start();
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+
+    if (!isset($_SESSION['tipo_user'])) {
+        header('Location: login.php');
+        exit;
+    }
+
+    $tipo_user = $_SESSION['tipo_user'] ?? null;
+    $alunos = [];
+
+    if ($tipo_user === 'Orientador') {
+        $orientadorId = $_SESSION['user_data']['id'] ?? null;
+
+        if ($orientadorId) {
+            $alunos = $this->user->buscarAlunosDoOrientador($orientadorId);
+        }
+    }
+
+    include __DIR__ . '/../views/telas/particional/anexar_documento.php';
+}
+
+public function salvarAnexo() {
+    
+    session_start();
+
+    if (!isset($_SESSION['tipo'])) {
+        header("Location: login.php");
+        exit;
+    }
+
+    $tipo = $_SESSION['tipo'];
+    $id_aluno = $tipo === 'aluno' ? $_SESSION['cliente_id'] : $_POST['aluno'] ?? null;
+    $nome_remetente = $_SESSION['cliente_nome'];
+    $descricao = $_POST['descricao'] ?? '';
+    $comentario = $_POST['comentario'] ?? '';
+    $prazo_entrega = $tipo === 'aluno' ? null : $_POST['prazo_entrega'];
+    $data_envio = date('Y-m-d');
+
+    // Trata o arquivo enviado
+    require_once __DIR__ . '/../utils/FileHelper.php';
+
+    $caminho = FileHelper::salvarArquivo($_FILES['arquivo'] ?? null);
+
+
+    $dados = [
+        'id_aluno' => $id_aluno,
+        'tipo_remetente' => $tipo,
+        'nome_remetente' => $nome_remetente,
+        'descricao' => $descricao,
+        'caminho_arquivo' => $caminho,
+        'comentario' => $comentario,
+        'data_envio' => $data_envio,
+        'prazo_entrega' => $prazo_entrega   
+    ];
+
+    if ($this->user->salvarDocumentoNoBanco($dados)) {
+        header("Location: sucesso.php");
+        exit;
+    } else {
+        echo "Erro ao salvar o anexo.";
+    }
+
+}
 
 
 }

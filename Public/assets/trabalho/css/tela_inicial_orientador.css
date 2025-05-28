@@ -1,6 +1,6 @@
-:root{
-    --primary-color: #5166AB;
-    --secondary-color: #4B7F96;
+:root {
+    --primary-color: #3f8792;
+    --secondary-color: #40a0a7;
     --background-light: #ECF9F7;
     --text-dark: #333333;
     --text-medium: #555555;
@@ -8,23 +8,23 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  background-color: #eef2f7;
-  margin: 0;
-  font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #eef2f7;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
 header {
-  background-color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 35px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  position: relative;
-  z-index: 10;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 35px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
 }
 
 .perfil {
@@ -46,14 +46,13 @@ header {
     object-fit: cover;
 }
 
-
-.perfil_info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.informacoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.perfil_info h2 {
+.informacoes h2 {
     font-weight: 500;
     font-size: medium;
     white-space: nowrap;
@@ -61,10 +60,10 @@ header {
     color: var(--text-dark);
 }
 
-.perfil_info p {
+.informacoes p {
     padding: 3px 8px;
     border-radius: 12px;
-    font-size: 12px; 
+    font-size: 12px;
     font-weight: 600;
     white-space: nowrap;
     margin: 0;
@@ -80,112 +79,110 @@ header {
     padding: 0;
 }
 
-/* Botões do cabeçalho com sombra suave que os faz parecer elevados */
 .link nav ul button {
-  padding: 10px 15px;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    padding: 10px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .link nav ul button:hover {
-  background-color: #3a4d7d;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    background-color: #40a0a7;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .barra_lateral {
-  width: 250px;
-  background: linear-gradient(180deg, #ffffff 0%, #f3f6fa 100%);
-  padding: 20px;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-  border-right: 1px solid #dde4ec;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
-  border-radius: 10px 0 0 10px;
+    width: 250px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fa 100%);
+    padding: 22px 34px 0px 6px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    border-right: 1px solid #dde4ec;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    border-radius: 10px 10px 10px 10px;
 }
-/* Estilo da pesquisa */
+
 .pesquisa {
-  margin-bottom: 25px;
+    margin-bottom: 25px;
 }
 
 .pesquisa input {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9fbfc;
-  font-size: 14px;
-  color: var(--text-dark);
-  outline: none;
-  transition: border 0.3s;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9fbfc;
+    font-size: 14px;
+    color: var(--text-dark);
+    outline: none;
+    transition: border 0.3s;
 }
 
 .pesquisa input:focus {
-  border-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
-/* Título da seção */
 .barra_lateral h3 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  border-bottom: 1px solid #e1e7ee;
-  padding-bottom: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid #e1e7ee;
+    padding-bottom: 10px;
 }
 
-/* Lista de colaboradores */
 .colaborador_lista {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0px;
 }
 
-.colaborador_lista li {
+.colaborador_lista .usuario {
   background-color: #ffffff;
   border: 1px solid #e6ecf1;
+  width: 250px;
+  height: 50px;
   border-radius: 6px;
   padding: 10px 12px;
   margin-bottom: 12px;
-  display: flex;
   flex-direction: column;
-  gap: 4px;
+  text-align: left;
+  gap: 1px;
+  cursor: pointer;
   transition: background 0.3s, box-shadow 0.3s;
 }
 
-.colaborador_lista li:hover {
-  background-color: #f0f6ff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+.colaborador_lista button:hover {
+    background-color: #d8d8d8;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .nome {
-  font-weight: 600;
-  font-size: 14px;
-  color: #222;
+    font-weight: 600;
+    font-size: 14px;
+    color: #222;
 }
 
 .tipo {
-  font-size: 12px;
-  color: var(--text-light);
-  font-style: italic;
+    font-size: 12px;
+    color: var(--text-light);
+    font-style: italic;
 }
 
 .content-wrapper {
-  display: flex;
-  margin-top: 20px; /* distância entre header e o conteúdo principal */
-  
+    display: flex;
+    margin-top: 20px;
 }
-
 
 .content {
     flex: 1;
@@ -194,21 +191,47 @@ header {
     margin-left: 10px;
 }
 
-.lista_documentos {
-    display: flex;
+.entrega_item {
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.entrega_header {
+    background-color: #3f8792;
+    color: white;
+    padding: 5px 5px;
+    cursor: pointer;
+}
+
+.entrega_header:hover {
+    background-color: #40a0a7;
+}
+
+.documentos_entrega {
+    display: none;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
 }
 
 .documento_item {
     display: flex;
     align-items: center;
-    background-color: #DCE3F5;
-    border: 1px solid var(--background-light);
     border-radius: 8px;
     padding: 15px;
     gap: 15px;
     box-shadow: 0 2px 4px rgba(75, 127, 150, 0.1);
+}
+
+.documento_item.aluno {
+    background-color: #DCE3F5;
+}
+
+.documento_item.professor {
+    background-color: #E0F3E6;
 }
 
 .icone_documento {
@@ -261,219 +284,160 @@ header {
     cursor: pointer;
     font-weight: 500;
     font-size: 14px;
-    transition: background-color 0.3s;
     white-space: nowrap;
 }
 
 .botao_download:hover {
-    background-color: #3a4d7d;
+    background-color: #40a0a7;
 }
 
-/* MODAL ESTILOS ATUALIZADOS */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-}
+/* ========== ESTILOS PARA SOBREPOSIÇÃO (MODAL DO FORMULÁRIO) ========== */
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
 
 .modal-content {
-    position: relative;
-    width: 500px;
-    max-width: 90%;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 2;
-    animation: fadeIn 0.3s ease;
+  background-color: white;
+  border-radius: 15px;
+  padding: 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  max-width: 550px;
+  width: 100%;
 }
 
-.modal-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* ========== ESTILOS DO FORMULÁRIO ========== */
+
+.content_main {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 0;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.modal-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
+
+.modal .content_main {
+  width: 100%;
+  max-width: 600px; /* Aumenta a largura máxima */
+  margin: 0 auto;
+  border-radius: 15px;
 }
 
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #666;
+
+
+.modal .content_main header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #3f8792;
+  padding: 0px 20px;
+  color: white;
 }
 
-.modal-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+.add_usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Estilos específicos para o upload box */
-.upload-box {
-    padding: 30px;
-    text-align: center;
+.img_add_usuario img {
+  width: 50px;
+  height: 50px;
 }
 
-.dox-icon {
-    font-size: 24px;
-    font-weight: bold;
-    color: #007B8A;
-    background-color: #e1f0f2;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+.icone_seta img {
+  width: 25px;
+  cursor: pointer;
 }
 
-.upload-box p {
-    margin: 0 0 20px;
-    color: #555;
-    font-size: 15px;
+.formulario {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  background-color: transparent;
 }
 
-.upload-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+
+
+.secao_informacoes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.custom-file-input {
-    padding: 10px 20px;
-    background-color: #007B8A;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
+.campo_infor {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.custom-file-input:hover {
-    background-color: #006075;
+.campo_infor input,
+.campo_infor select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 14px;
 }
 
-.file-name {
-    font-size: 13px;
-    color: #777;
-    font-style: italic;
+.secao_tipo_grupo {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
-/* Estilo para quando um arquivo é selecionado */
-.file-selected .file-name {
-    color: #007B8A;
-    font-weight: 500;
+.coluna {
+  flex: 1;
+  min-width: 250px;
 }
 
-/* Esconder o input file padrão */
-.upload-box input[type="file"] {
-    display: none;
+.coluna h2 {
+  margin: 0 0 5px 0;
+}
+  
+.coluna p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
-.alunos-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
+.opcoes_tipo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.aluno-item {
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    gap: 10px;
+.opcoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.icone-aluno {
-    width: 30px;
-    height: 30px;
+.botao_criar {
+  align-self: center;
+  background-color: #3f8792;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.icone-aluno img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.aluno-item span {
-    font-size: 14px;
-    color: #333;
-}
-
-.logout-box {
-    text-align: center;
-    padding: 20px;
-}
-
-.logout-box p {
-    margin: 0 0 10px;
-    font-size: 16px;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+.botao_criar:hover {
+  background-color: #40a0a7;
 }
