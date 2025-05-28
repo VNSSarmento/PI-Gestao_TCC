@@ -57,7 +57,7 @@ function abrirModalComConteudo(htmlPath) {
             formData.append("tipo", tipoRemetente);
             formData.append("prazo_entrega", prazo);
 
-            fetch("/?rota=salvarAnexo", {
+            fetch("/?rota=salvar_anexo", {
               method: "POST",
               body: formData,
             })

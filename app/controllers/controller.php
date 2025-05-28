@@ -440,12 +440,19 @@ public function salvarAnexo() {
         'prazo_entrega' => $prazo_entrega   
     ];
 
-    if ($this->user->salvarDocumentoNoBanco($dados)) {
-        echo "<p style='color: green;'>Anexo salvo com sucesso!</p>";
-            } else {
-        echo "<p style='color: red;'>Erro ao salvar o anexo.</p>";  
-    }
+    header('Content-Type: application/json');
 
+        if ($this->user->salvarDocumentoNoBanco($dados)) {
+            echo json_encode([
+                'sucesso' => true,
+                'mensagem' => 'Anexo salvo com sucesso!'
+            ]);
+        } else {
+            echo json_encode([
+                'sucesso' => false,
+                'mensagem' => 'Erro ao salvar o anexo no banco de dados.'
+            ]);
+        }
 }
 
 
