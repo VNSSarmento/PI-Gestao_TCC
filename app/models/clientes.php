@@ -206,8 +206,8 @@ class User {
     }
 
     public function salvarDocumentoNoBanco($dados){
-        $sql = "INSERT INTO anexos (id_aluno, tipo_remetente, nome_remetente, descricao, caminho_arquivo, comentario, data_envio, prazo_entrega) 
-                VALUES (:id_aluno, :tipo_remetente, :nome_remetente, :descricao, :caminho_arquivo, :comentario, :data_envio, :prazo_entrega)";
+        $sql = "INSERT INTO documentos (id_aluno, tipo_remetente, nome_remetente, caminho_arquivo, comentario, data_envio, prazo_entrega) 
+                VALUES (:id_aluno, :tipo_remetente, :nome_remetente, :caminho_arquivo, :comentario, :data_envio, :prazo_entrega)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($dados);
     }

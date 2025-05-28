@@ -43,7 +43,6 @@ class controller {
 
     public function modalAnexarDoc() {
          session_start();
-        var_dump($_SESSION);
     include __DIR__. '/../views/telas/particional/anexar_documento.php';
     }
 
@@ -409,7 +408,6 @@ public function anexarDocumento() {
 }
 
 public function salvarAnexo() {
-    
     session_start();
 
     if (!isset($_SESSION['tipo'])) {
@@ -418,24 +416,24 @@ public function salvarAnexo() {
     }
 
     $tipo = $_SESSION['tipo'];
-    $id_aluno = $tipo === 'aluno' ? $_SESSION['cliente_id'] : $_POST['aluno'] ?? null;
+    $id_aluno = $tipo === 'aluno' ? $_SESSION['cliente_id'] : ($_POST['aluno'] ?? null);
     $nome_remetente = $_SESSION['cliente_nome'];
-    $descricao = $_POST['descricao'] ?? '';
     $comentario = $_POST['comentario'] ?? '';
-    $prazo_entrega = $tipo === 'aluno' ? null : $_POST['prazo_entrega'];
+    $prazo_entrega = $tipo === 'aluno' ? null : ($_POST['prazo_entrega'] ?? null);
     $data_envio = date('Y-m-d');
 
-    // Trata o arquivo enviado
+    if (empty($_FILES['documento']['name'])) {
+        echo "Nenhum arquivo foi enviado.";
+        exit;
+    }
+
     require_once __DIR__ . '/../utils/FileHelper.php';
-
-    $caminho = FileHelper::salvarArquivo($_FILES['arquivo'] ?? null);
-
+    $caminho = FileHelper::salvarArquivo($_FILES['documento']);
 
     $dados = [
         'id_aluno' => $id_aluno,
         'tipo_remetente' => $tipo,
         'nome_remetente' => $nome_remetente,
-        'descricao' => $descricao,
         'caminho_arquivo' => $caminho,
         'comentario' => $comentario,
         'data_envio' => $data_envio,
@@ -443,10 +441,9 @@ public function salvarAnexo() {
     ];
 
     if ($this->user->salvarDocumentoNoBanco($dados)) {
-        header("Location: sucesso.php");
-        exit;
-    } else {
-        echo "Erro ao salvar o anexo.";
+        echo "<p style='color: green;'>Anexo salvo com sucesso!</p>";
+            } else {
+        echo "<p style='color: red;'>Erro ao salvar o anexo.</p>";  
     }
 
 }
