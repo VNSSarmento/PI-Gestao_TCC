@@ -44,44 +44,60 @@
                <?php endforeach; ?>
                 </ul>
             </aside>
-                    <main class="content">
-            <section class="entrega_item">
-                <div class="entrega_header" onclick="toggleEntrega(this)">
-                    <h3>Entrega 1</h3>
-                </div>
-                <div class="documentos_entrega">
-                    <div class="documento_item aluno">
-                        <div class="icone_documento"><img src="/./Public/assets/trabalho/imagens/contrato.png" alt=""></div>
-                        <div class="documento_info">
-                            <span class="nome_documento">Documento do Aluno</span>
-                            <span class="separador">|</span>
-                            <span class="autor">Aluno: Fulano da Silva - 202501001</span>
-                            <span class="separador">|</span>
-                            <span class="descricao">Análise e desenvolvimento de Sistema</span>
-                            <span class="separador">|</span>
-                            <span class="data">Enviado: 01/01/2025 23:59:59</span>
-                        </div>
+    <main class="content">
+    <?php if (!empty($documentos)): ?>
+    <section class="entrega_item">
+        <div class="entrega_header" onclick="toggleEntrega(this)">
+            <h3>Entrega 1</h3>
+        </div>
+        <div class="documentos_entrega">
+            <?php foreach ($documentos as $doc): ?>
+                <div class="documento_item aluno">
+                    <div class="icone_documento">
+                        <img src="/Public/assets/trabalho/imagens/contrato.png" alt="Documento">
+                    </div>
+                    <div class="documento_info">
+                        <span class="nome_documento">Documento do Aluno</span>
+                        <span class="separador">|</span>
+                        <span class="autor">Aluno: <?= htmlspecialchars($user['nome']) ?></span>
+                        <span class="separador">|</span>
+                        <span class="descricao"><?= htmlspecialchars($doc['curso']) ?></span>
+                        <span class="separador">|</span>
+                        <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
+                    </div>
+                    <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
                         <button class="botao_download">Fazer Download</button>
-                    </div>
-                    <div class="documento_item professor">
-                        <div class="icone_documento"><img src="/./Public/assets/trabalho/imagens/documentosEnvio.png"alt=""></div>
-                        <div class="documento_info">
-                            <span class="nome_documento">Correção do Professor</span>
-                            <span class="separador">|</span>
-                            <span class="autor">Professor: Paula Lima</span>
-                            <span class="separador">|</span>
-                            <span class="descricao">Correções e comentários</span>
-                            <span class="separador">|</span>
-                            <span class="data">Enviado: 02/01/2025 10:00:00</span>
-                        </div>
-                        <button class="botao_download">Fazer Download</button>
-                    </div>
-                    <div class="comentario_exibido">
-                        <strong>Comentário:</strong>
-                        <p>O documento está bem estruturado, mas revise a parte 3.2 e adicione referências atualizadas.</p>
-                    </div>
+                    </a>
                 </div>
-            </section>
+                        <?php if (!empty($doc['comentario_professor'])): ?>
+                            <div class="documento_item professor">
+                                <div class="icone_documento">
+                                    <img src="/Public/assets/trabalho/imagens/documentosEnvio.png" alt="Professor">
+                                </div>
+                                <div class="documento_info">
+                                    <span class="nome_documento">Correção do Professor</span>
+                                    <span class="separador">|</span>
+                                    <span class="autor">Professor: <?= htmlspecialchars($doc['nome_orientador']) ?></span>
+                                    <span class="separador">|</span>
+                                    <span class="descricao">Correções e comentários</span>
+                                    <span class="separador">|</span>
+                                    <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_correção'])) ?></span>
+                                </div>
+                                <a href="<?= htmlspecialchars($doc['caminho_correção']) ?>" download>
+                                    <button class="botao_download">Fazer Download</button>
+                                </a>
+                            </div>
+                            <div class="comentario_exibido">
+                                <strong>Comentário:</strong>
+                                <p><?= htmlspecialchars($doc['comentario_professor']) ?></p>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+              </section>
+            <?php else: ?>
+            <p style="margin: 20px; font-size: 18px; color: #555;">Nenhum documento enviado ainda.</p>
+            <?php endif; ?>
         </main>
     </div>
         <div id="modalUnico" class="modal">

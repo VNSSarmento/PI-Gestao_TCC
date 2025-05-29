@@ -73,6 +73,9 @@ switch ($rota) {
     case 'salvar_anexo':
         $controller->salvarAnexo();
         break;
+    case 'documentos_aluno':
+        $controller->documentosAluno();
+        break;
     default:
         echo "Página não encontrada.";
         break;

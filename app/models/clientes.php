@@ -213,7 +213,10 @@ class User {
     }
 
     public function buscarDocumentosPorAluno($idAluno) {
-        $sql = "SELECT * FROM documentos WHERE id_aluno = :id";
+        $sql = "SELECT a.*,b.curso 
+                FROM documentos a 
+                inner join aluno b on id_aluno = b.id
+                WHERE id_aluno = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['id' => $idAluno]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

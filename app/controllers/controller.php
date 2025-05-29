@@ -127,6 +127,8 @@ public function mainAluno() {
 
     $orientador = $this->user->buscarOrientadorDoAluno($alunoId);
 
+    $documentos = $this->user->buscarDocumentosPorAluno($id); //COLOCAR ISSO QUANDO FOR FAZER PARA PROFESSOR
+
     include __DIR__ . '/../views/telas/main_aluno.php';
 }
 
@@ -366,12 +368,18 @@ public function atualizarSenha() {
     }
 
 public function documentosAluno() {
-    if (!isset($_GET['id'])) {
-        echo "ID do aluno não fornecido.";
-        return;
+
+    session_start();
+    if ($_SESSION['tipo'] === 'aluno') {
+        $idAluno = (int) ($_SESSION['cliente_id'] ?? 0);
+    } else {
+        $idAluno = (int) ($_GET['id'] ?? 0);
     }
 
-    $idAluno = (int)$_GET['id'];
+    if (!$idAluno) {
+        echo "ID do aluno não encontrado.";
+        return;
+    }
 
     $documentos = $this->user->buscarDocumentosPorAluno($idAluno);
     $nomeAluno = $this->user->buscarNomeAluno($idAluno);
@@ -381,31 +389,7 @@ public function documentosAluno() {
     include 'app/views/telas/particional/documento_aluno.php';
 }
 
-public function anexarDocumento() {
-    session_start();
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
 
-
-    if (!isset($_SESSION['tipo_user'])) {
-        header('Location: login.php');
-        exit;
-    }
-
-    $tipo_user = $_SESSION['tipo_user'] ?? null;
-    $alunos = [];
-
-    if ($tipo_user === 'Orientador') {
-        $orientadorId = $_SESSION['user_data']['id'] ?? null;
-
-        if ($orientadorId) {
-            $alunos = $this->user->buscarAlunosDoOrientador($orientadorId);
-        }
-    }
-
-    include __DIR__ . '/../views/telas/particional/anexar_documento.php';
-}
 
 public function salvarAnexo() {
     session_start();
