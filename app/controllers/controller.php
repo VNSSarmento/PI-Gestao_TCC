@@ -41,11 +41,6 @@ class controller {
         include __DIR__ . '/../views/telas/recuperar_senha.php';
     }
 
-    public function modalAnexarDoc() {
-         session_start();
-    include __DIR__. '/../views/telas/particional/anexar_documento.php';
-    }
-
     public function cadastrarUser(){
         include __DIR__.'/../views/telas/add.adm.php';
     }
@@ -439,5 +434,9 @@ public function salvarAnexo() {
         }
 }
 
+  public function modalAnexarDoc() {
+         session_start();
+    include __DIR__. '/../views/telas/particional/anexar_documento.php';
+    }
 
 }

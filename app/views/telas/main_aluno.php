@@ -14,7 +14,7 @@
             </div>
             <div class="perfil_info">
                 <h2><?php echo htmlspecialchars($user['nome']); ?></h2>
-                <p>ADS</p>
+                <p><?php echo htmlspecialchars($user['curso']); ?></p>
             </div>
         </section>
         <section class="link">

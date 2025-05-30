@@ -56,7 +56,6 @@
             </div>
             <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=modal_add_usuario')">Adicionar Usuário</button>
           </div>
-
           <div class="card_acao">
             <div class="icone_acao">
               <img src="/Public/assets/trabalho/imagens/funcao-do-usuario.png" alt="Bloquear usuário">
@@ -70,15 +69,13 @@
     <!-- Modal Único para conteúdo dinâmico -->
     <div id="modalUnico" class="modal">
       <div id="modalContent" class="modal-content">
+        
         <!-- Conteúdo será carregado dinamicamente aqui -->
       </div>
     </div>
 
-
-    <script src="/Public/assets/trabalho/js/card.js"></script>
-    <script src="/Public/assets/trabalho/js/formulario.js"></script>
-
 <script>
+  
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('campoPesquisa');
   const lista = document.getElementById('listaColaboradores');
@@ -97,7 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 </script>
-
+    <script src="/Public/assets/trabalho/js/card.js"></script>
+    <script src="/Public/assets/trabalho/js/formulario.js"></script>
 </body>
 </html>
 

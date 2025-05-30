@@ -21,6 +21,6 @@
     </header>
   </main>
 
-  <script src="/Public/assets/trabalho/js/formulario.js"></script>
+<script src="/Public/assets/trabalho/js/formulario.js"></script>
 </body>
 </html>
