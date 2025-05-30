@@ -5,7 +5,7 @@ function abrirModalComConteudo(url) {
       document.getElementById('modalContent').innerHTML = html;
       document.getElementById('modalUnico').style.display = 'flex';
 
-      // Agora que o formulário foi carregado, adiciona o listener
+      // Verifica se é o modal de adicionar usuário
       const form = document.getElementById('formAdicionarUsuario');
       if (form) {
         form.addEventListener('submit', function (e) {
@@ -22,7 +22,7 @@ function abrirModalComConteudo(url) {
               alert('Erro ao cadastrar usuário: ' + res);
             } else {
               alert('Usuário cadastrado com sucesso!');
-              fecharModalUnico(); // ou atualiza a lista, etc.
+              fecharModalUnico();
             }
           })
           .catch(err => {
@@ -31,11 +31,22 @@ function abrirModalComConteudo(url) {
           });
         });
       }
+
+      // Ativa os botões de bloquear se existirem no modal
+      if (document.querySelector('.btn-bloquear')) {
+        ativarEventosDeBloqueio();
+      }
+
+      // Ativa filtro se campo de pesquisa existir
+      if (document.getElementById('campoPesquisa')) {
+        ativarFiltroColaboradores();
+      }
     })
     .catch(err => {
       console.error('Erro ao carregar modal:', err);
     });
 }
+
 
 
       function fecharModalUnico() {
