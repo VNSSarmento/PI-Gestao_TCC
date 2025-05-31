@@ -46,42 +46,7 @@
         </aside>
         <main class="content">
             <section class="entrega_item">
-                <div class="entrega_header" onclick="toggleEntrega(this)">
-                    <h3>Entrega 1</h3>
-                </div>
-                <div class="documentos_entrega">
-                    <div class="documento_item aluno">
-                        <div class="icone_documento"><img src="/./Public/assets/trabalho/imagens/documentosenvioaluno.png" alt=""></div>
-                        <div class="documento_info">
-                            <span class="nome_documento">Documento do Aluno</span>
-                            <span class="separador">|</span>
-                            <span class="autor">Aluno: Fulano da Silva - 202501001</span>
-                            <span class="separador">|</span>
-                            <span class="descricao">Análise e desenvolvimento de Sistema</span>
-                            <span class="separador">|</span>
-                            <span class="data">Enviado: 01/01/2025 23:59:59</span>
-                        </div>
-                        <button class="botao_download">Fazer Download</button>
-                    </div>
-                    <div class="documento_item professor">
-                        <div class="icone_documento"><img src="/./Public/assets/trabalho/imagens/documentosEnvio.png"alt=""></div>
-                        <div class="documento_info">
-                            <span class="nome_documento">Correção do Professor</span>
-                            <span class="separador">|</span>
-                            <span class="autor">Professor: Paula Lima</span>
-                            <span class="separador">|</span>
-                            <span class="descricao">Correções e comentários</span>
-                            <span class="separador">|</span>
-                            <span class="data">Enviado: 02/01/2025 10:00:00</span>
-                        </div>
-                        <button class="botao_download">Fazer Download</button>
-                    </div>
-                    <div class="comentario_exibido">
-                        <strong>Comentário:</strong>
-                        <p>O documento está bem estruturado, mas revise a parte 3.2 e adicione referências atualizadas.</p>
-                    </div>
-                </div>
-            </section>
+
         </main>
     </div>
     

@@ -44,64 +44,76 @@
                <?php endforeach; ?>
                 </ul>
             </aside>
-             <main class="content">
-            <?php if (!empty($documentos)): ?>
-              <section class="entrega_item">
-              <div class="entrega_header" onclick="toggleEntrega(this)">
-            <h3>Entrega 1</h3>
-             </div>
-        <div class="documentos_entrega">
-            <?php foreach ($documentos as $doc): ?>
-                    <?php if (($doc['tipo_remetente'] ?? '') === 'aluno'): ?>
-                        <div class="documento_item aluno">
-                            <div class="icone_documento">
-                                <img src="/Public/assets/trabalho/imagens/contrato.png" alt="Documento">
-                            </div>
-                            <div class="documento_info">
-                                <span class="nome_documento">Documento do Aluno</span>
-                                <span class="separador">|</span>
-                                <span class="autor">Aluno: <?= htmlspecialchars($user['nome']) ?></span>
-                                <span class="separador">|</span>
-                                <span class="descricao"><?= htmlspecialchars($doc['curso']) ?></span>
-                                <span class="separador">|</span>
-                                <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
-                            </div>
-                            <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
-                                <button class="botao_download">Fazer Download</button>
-                            </a>
-                        </div>
-                    <?php elseif (($doc['tipo_remetente'] ?? '') === ''): ?>
-                        <div class="documento_item professor">
-                            <div class="icone_documento">
-                                <img src="/Public/assets/trabalho/imagens/documentosEnvio.png" alt="Professor">
-                            </div>
-                            <div class="documento_info">
-                                <span class="nome_documento">Documento do Orientador</span>
-                                <span class="separador">|</span>
-                                <span class="autor">Professor: <?= htmlspecialchars($doc['nome_remetente'] ?? 'Professor') ?></span>
-                                <span class="separador">|</span>
-                                <span class="descricao">Correções e comentários</span>
-                                <span class="separador">|</span>
-                                <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
-                            </div>
-                            <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
-                                <button class="botao_download">Fazer Download</button>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                        <?php if (!empty($doc['comentario'])): ?>
-                                <div class="comentario_exibido">
-                                    <strong>Comentário:</strong>
-                                    <p><?= htmlspecialchars($doc['comentario']) ?></p>
-                                </div>
-                        <?php endif; ?>
-                <?php endforeach; ?>
+       <?php
+$entregasAgrupadas = [];
+foreach ($documentos as $doc) {
+    $numeroEntrega = $doc['entrega'] ?? 1; // Fallback se for NULL
+    $entregasAgrupadas[$numeroEntrega][] = $doc;
+}
+?>
+
+<main class="content">
+    <?php if (!empty($entregasAgrupadas)): ?>
+        <?php foreach ($entregasAgrupadas as $numeroEntrega => $docs): ?>
+            <section class="entrega_item">
+                <div class="entrega_header" onclick="toggleEntrega(this)">
+                    <h3>Entrega <?= $numeroEntrega ?></h3>
                 </div>
-              </section>
-            <?php else: ?>
-            <p style="margin: 20px; font-size: 18px; color: #555;">Nenhum documento enviado ainda.</p>
-            <?php endif; ?>
-        </main>
+                <div class="documentos_entrega">
+                    <?php foreach ($docs as $doc): ?>
+                        <?php if (($doc['tipo_remetente'] ?? '') === 'aluno'): ?>
+                            <div class="documento_item aluno">
+                                <div class="icone_documento">
+                                    <img src="/Public/assets/trabalho/imagens/contrato.png" alt="Documento">
+                                </div>
+                                <div class="documento_info">
+                                    <span class="nome_documento">Documento do Aluno</span>
+                                    <span class="separador">|</span>
+                                    <span class="autor">Aluno: <?= htmlspecialchars($user['nome']) ?></span>
+                                    <span class="separador">|</span>
+                                    <span class="descricao"><?= htmlspecialchars($doc['curso']) ?></span>
+                                    <span class="separador">|</span>
+                                    <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
+                                </div>
+                                <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
+                                    <button class="botao_download">Fazer Download</button>
+                                </a>
+                            </div>
+                        <?php else: ?>
+                            <div class="documento_item professor">
+                                <div class="icone_documento">
+                                    <img src="/Public/assets/trabalho/imagens/documentosEnvio.png" alt="Professor">
+                                </div>
+                                <div class="documento_info">
+                                    <span class="nome_documento">Documento do Orientador</span>
+                                    <span class="separador">|</span>
+                                    <span class="autor">Professor: <?= htmlspecialchars($doc['nome_remetente'] ?? 'Professor') ?></span>
+                                    <span class="separador">|</span>
+                                    <span class="descricao">Correções e comentários</span>
+                                    <span class="separador">|</span>
+                                    <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
+                                </div>
+                                <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
+                                    <button class="botao_download">Fazer Download</button>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($doc['comentario'])): ?>
+                            <div class="comentario_exibido">
+                                <strong>Comentário:</strong>
+                                <p><?= htmlspecialchars($doc['comentario']) ?></p>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </section>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p style="margin: 20px; font-size: 18px; color: #555;">Nenhum documento enviado ainda.</p>
+    <?php endif; ?>
+</main>
+
     </div>
         <div id="modalUnico" class="modal">
         <div id="modalContent" class="modal-content"></div>

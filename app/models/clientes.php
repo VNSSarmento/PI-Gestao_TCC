@@ -205,8 +205,8 @@ class User {
     }
 
     public function salvarDocumentoNoBanco($dados){
-        $sql = "INSERT INTO documentos (id_aluno, tipo_remetente, nome_remetente, caminho_arquivo, comentario, data_envio, prazo_entrega) 
-                VALUES (:id_aluno, :tipo_remetente, :nome_remetente, :caminho_arquivo, :comentario, :data_envio, :prazo_entrega)";
+        $sql = "INSERT INTO documentos (id_aluno, tipo_remetente, nome_remetente, caminho_arquivo, comentario, data_envio, prazo_entrega, entrega) 
+                VALUES (:id_aluno, :tipo_remetente, :nome_remetente, :caminho_arquivo, :comentario, :data_envio, :prazo_entrega, :entrega)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($dados);
     }
@@ -226,6 +226,14 @@ class User {
     $stmt->execute(['id' => $idAluno]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row ? $row['nome'] : null;
+    }
+
+
+    public function contar_entregas($idAluno) {
+        $sql = "SELECT COUNT(*) FROM documentos WHERE id_aluno = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $idAluno]);
+        return (int) $stmt->fetchColumn();
     }
 
 

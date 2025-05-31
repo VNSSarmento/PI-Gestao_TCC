@@ -100,7 +100,10 @@ public function mainOrientador() {
 
         $orientadorId = $_SESSION['cliente_id'];
 
+        $entregaLiberada = $_SESSION['entrega_disponivel'] ?? 1;
+
         $alunos = $this->user->buscarAlunosDoOrientador($orientadorId);
+
 
         include __DIR__ . '/../views/telas/main_orientador.php';
     }
@@ -111,6 +114,8 @@ public function mainAluno() {
         header("Location: /?rota=telaloginAluno");
         exit;
     }
+
+    $entregaLiberada = $_SESSION['entrega_disponivel'] ?? 1;
 
     $id = $_SESSION['cliente_id'];
 
@@ -387,7 +392,6 @@ public function documentosAluno() {
 
 
 public function salvarAnexo() {
-
     session_start();
 
     if (!isset($_SESSION['tipo'])) {
@@ -396,7 +400,6 @@ public function salvarAnexo() {
     }
 
     $tipo = $_SESSION['tipo'];
-    error_log("Tipo remetente na sessão: " . $tipo);
     $id_aluno = $tipo === 'aluno' ? $_SESSION['cliente_id'] : ($_POST['aluno'] ?? null);
     $nome_remetente = $_SESSION['cliente_nome'];
     $comentario = $_POST['comentario'] ?? '';
@@ -404,21 +407,26 @@ public function salvarAnexo() {
     $data_envio = date('Y-m-d');
 
     if (empty($_FILES['documento']['name'])) {
-        echo "Nenhum arquivo foi enviado.";
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Nenhum arquivo foi enviado.'
+        ]);
         exit;
     }
 
     if ($tipo !== 'aluno' && empty($prazo_entrega)) {
-    echo json_encode([
-        'sucesso' => false,
-        'mensagem' => 'Prazo de entrega é obrigatório para professores.'
-    ]);
-    exit;
-}
-
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Prazo de entrega é obrigatório para professores.'
+        ]);
+        exit;
+    }
 
     require_once __DIR__ . '/../utils/FileHelper.php';
     $caminho = FileHelper::salvarArquivo($_FILES['documento']);
+
+    $totalDocs = $this->user->contar_entregas($id_aluno);
+    $numeroEntrega = intdiv($totalDocs, 2) + 1;
 
     $dados = [
         'id_aluno' => $id_aluno,
@@ -427,27 +435,38 @@ public function salvarAnexo() {
         'caminho_arquivo' => $caminho,
         'comentario' => $comentario,
         'data_envio' => $data_envio,
-        'prazo_entrega' => $prazo_entrega   
+        'prazo_entrega' => $prazo_entrega,
+        'entrega' => $numeroEntrega
     ];
 
     header('Content-Type: application/json');
 
-        if ($this->user->salvarDocumentoNoBanco($dados)) {
-            echo json_encode([
-                'sucesso' => true,
-                'mensagem' => 'Anexo salvo com sucesso!'
-            ]);
-        } else {
-            echo json_encode([
-                'sucesso' => false,
-                'mensagem' => 'Erro ao salvar o anexo no banco de dados.'
-            ]);
-        }
+    if ($this->user->salvarDocumentoNoBanco($dados)) {
+        // Atualiza a contagem depois de salvar
+        $totalDocs = $this->user->contar_entregas($id_aluno);
+        $proximaEntrega = intdiv($totalDocs, 2) + 1;
+
+        // Atualiza sessão com entrega liberada
+        $_SESSION['entrega_disponivel'] = $proximaEntrega;
+
+        echo json_encode([
+            'sucesso' => true,
+            'mensagem' => 'Anexo salvo com sucesso!',
+            'nova_entrega' => $proximaEntrega
+        ]);
+    } else {
+        echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Erro ao salvar o anexo no banco de dados.'
+        ]);
+    }
 }
 
-  public function modalAnexarDoc() {
+public function modalAnexarDoc() {
     session_start();
     include __DIR__. '/../views/telas/particional/anexar_documento.php';
     }
+
+
 
 }
