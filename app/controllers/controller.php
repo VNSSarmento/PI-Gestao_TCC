@@ -387,6 +387,7 @@ public function documentosAluno() {
 
 
 public function salvarAnexo() {
+
     session_start();
 
     if (!isset($_SESSION['tipo'])) {
@@ -395,6 +396,7 @@ public function salvarAnexo() {
     }
 
     $tipo = $_SESSION['tipo'];
+    error_log("Tipo remetente na sessão: " . $tipo);
     $id_aluno = $tipo === 'aluno' ? $_SESSION['cliente_id'] : ($_POST['aluno'] ?? null);
     $nome_remetente = $_SESSION['cliente_nome'];
     $comentario = $_POST['comentario'] ?? '';
@@ -405,6 +407,15 @@ public function salvarAnexo() {
         echo "Nenhum arquivo foi enviado.";
         exit;
     }
+
+    if ($tipo !== 'aluno' && empty($prazo_entrega)) {
+    echo json_encode([
+        'sucesso' => false,
+        'mensagem' => 'Prazo de entrega é obrigatório para professores.'
+    ]);
+    exit;
+}
+
 
     require_once __DIR__ . '/../utils/FileHelper.php';
     $caminho = FileHelper::salvarArquivo($_FILES['documento']);
@@ -435,7 +446,7 @@ public function salvarAnexo() {
 }
 
   public function modalAnexarDoc() {
-         session_start();
+    session_start();
     include __DIR__. '/../views/telas/particional/anexar_documento.php';
     }
 

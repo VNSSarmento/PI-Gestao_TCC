@@ -26,7 +26,7 @@ class User {
     $sql = "SELECT * FROM aluno WHERE id = :id";
     $stmt = $this->pdo->prepare($sql);
     $stmt->execute([':id' => $id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC); // Pode retornar false se não achar
+    return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function autenticarProfessor($email, $senha) {
@@ -81,7 +81,6 @@ class User {
             return ['status' => 'Usuario_block'];
         }
 
-        // 3. Verifica a senha
         if (password_verify($senha, $aluno['senha'])) {
  //           $this->tipo_user = 'Aluno';
             return ['status' => 'ok', 'user' => $aluno];

@@ -10,17 +10,17 @@
     <header>
         <section class="perfil">
             <div class="foto_perfil">
-              <img src="/Public/assets/uploads/<?php echo htmlspecialchars($user['foto'] ?? 'default.png'); ?>" alt="foto de perfil">
+              <img src="/Public/assets/uploadsProfessor/<?php echo htmlspecialchars($user['foto'] ?? 'escola.png'); ?>" alt="foto de perfil">
             </div>
             <div class="perfil_info">
                 <h2><?php echo htmlspecialchars($user['nome']); ?></h2>
-                <p>ADS</p>
+                <p><?php echo htmlspecialchars($user['curso']); ?></p>
             </div>
         </section>
         <section class="link">
             <nav>
                 <ul>
-                    <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=modal_anexar_doc')">Anexar Documento</button>
+                   <!--  <button class="botao_acao" id="btnAnexarDocumento" onclick="abrirModalComConteudo('/?rota=modal_anexar_doc')">Anexar Documento</button> -->
                     <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=perfil_orientador.html')">Meu Perfil</button>
                     <button onclick="">Etapas do TCC</button>
                    <a href="/?rota=logout"><button onclick="abrirModal('logout')">Fazer LogOut</button></a> 
@@ -89,6 +89,37 @@
       <div id="modalContent" class="modal-content"></div>
       </div>
     </div>
+
+    <script>
+       document.querySelectorAll('.usuario').forEach(botao => {
+        botao.addEventListener('click', () => {
+            const alunoId = botao.getAttribute('data-id');
+
+            fetch(`/?rota=documentos_aluno&id=${alunoId}`)
+                .then(res => res.text())
+                .then(html => {
+                    const content = document.querySelector('main.content');
+                    content.innerHTML = html;
+                    
+                    const botaoAnexar = content.querySelector('.btn-anexar');
+                        if (botaoAnexar) {
+                        botaoAnexar.addEventListener('click', () => {
+                        abrirModalComConteudo(`/?rota=modal_anexar_doc&id=${alunoId}`);
+                       });
+                            }
+                    // Passa o id do aluno para o input escondido no modal (caso precise depois)
+                    const inputAluno = document.getElementById('alunoSelecionado');
+                    if (inputAluno) {
+                        inputAluno.value = alunoId;
+                    }
+                })
+                .catch(err => {
+                    console.error('Erro ao carregar documentos:', err);
+                });
+        });
+    });
+
+</script>
     <script src="/asstes/js/script_sobreposicao.js"></script>
     <script src="/Public/assets/trabalho/js/card.js"></script>
     <script src="/Public/assets/trabalho/js/formulario.js"></script>
@@ -96,35 +127,5 @@
     <script src="/Public/assets/trabalho/js/teste.js"></script>
     <script src="/Public/assets/trabalho/js/prazo_entrega.js"></script>
     <script src ="/Public/assets/trabalho/js/entregas.js"></script>
-
-<!-- <script>
-    function carregarDocumentosAluno(botao) {
-        const alunoId = botao.getAttribute('data-id');
-        console.log('Aluno selecionado: ', alunoId);
-
-        // Define o valor do input hidden do formulário (caso exista no DOM já)
-        const inputIdAluno = document.querySelector('input[name="id_aluno"]');
-        if (inputIdAluno) {
-            inputIdAluno.value = alunoId;
-        }
-
-        // Carrega os documentos do aluno via fetch
-        fetch(`/?rota=documento_aluno&id=${alunoId}`)
-            .then(res => res.text())
-            .then(html => {
-                document.querySelector('.content').innerHTML = html;
-
-                const novoInput = document.querySelector('input[name="id_aluno"]');
-                if (novoInput) {
-                    novoInput.value = alunoId;
-                }
-            })
-            .catch(err => {
-                console.error('Erro ao carregar documentos:', err);
-            });
-    }
-</script> -->
-
-
 </body>
 </html>

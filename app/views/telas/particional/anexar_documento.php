@@ -25,22 +25,22 @@
             <?php if ($tipo !== 'aluno'): ?>
             <label for="comentario-texto">Comentário sobre a entrega:</label>
                 <textarea name="comentario" id="comentario-texto" rows="4" placeholder="Digite seu comentário aqui..."></textarea>
-                <input type="hidden" name="aluno" id="alunoSelecionado">
             <?php endif; ?>
         </div>
-          <input type="hidden" name="aluno" id="alunoSelecionado">
+            <input type="hidden" name="aluno" id="alunoSelecionado" value="<?= htmlspecialchars($_GET['id'] ?? '') ?>">
         <div class="entrega">
             <?php if ($tipo !== 'aluno'): ?>
                   <label for="prazo_entrega">Prazo para entrega:</label>
                   <input type="date" name="prazo_entrega" id="prazo_entrega">
+                  <div id="erro-prazo" style="color: red; display: none; margin-top: 10px;">Por favor, selecione o prazo para entrega.</div>
             <?php endif; ?>
             <button class="submit-btn" id="submit-btn"  data-tipo-remetente="<?= $_SESSION['tipo'] ?>">Enviar</button>
         </div>
       </form>
   </div>
 
-<script src="/Public/assets/trabalho/js/teste.js"></script>
-<script src="/Public/assets/trabalho/js/anexar.js"></script>
 <script src="/Public/assets/trabalho/js/prazo_entrega.js"></script>
+<script src="/Public/assets/trabalho/js/teste.js"></script>
+<script src="/Public/assets/trabalho/js/anexar.js"></script> <!-- <- aqui fica o abrirmodalcomconteudo -->
 </body>
 </html>

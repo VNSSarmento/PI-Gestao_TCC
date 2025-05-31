@@ -2,12 +2,16 @@ function abrirModalComConteudo(htmlPath) {
   fetch(htmlPath)
     .then(res => res.text())
     .then(html => {
-      document.getElementById('modalContent').innerHTML = html;
-      document.getElementById('modalUnico').style.display = 'flex';
+      const modalContent = document.getElementById('modalContent');
+      const modalUnico = document.getElementById('modalUnico');
 
-      setTimeout(() => {
+      modalContent.innerHTML = html;
+      modalUnico.style.display = 'flex';
+
+      // Função para configurar listeners, só uma vez
+      function configurarListeners() {
         const hoje = new Date().toISOString().split("T")[0];
-        const inputData = document.getElementById("prazo-entrega");
+        const inputData = document.getElementById("prazo_entrega");
         if (inputData) {
           inputData.setAttribute("min", hoje);
         }
@@ -15,6 +19,7 @@ function abrirModalComConteudo(htmlPath) {
         const fileInput = document.getElementById("file-input");
         const fileNameDisplay = document.getElementById("file-name-display");
         const errorMsg = document.getElementById("error-message");
+        const submitBtn = document.getElementById("submit-btn");
 
         if (fileInput && fileNameDisplay && errorMsg) {
           fileInput.addEventListener("change", () => {
@@ -34,21 +39,37 @@ function abrirModalComConteudo(htmlPath) {
           });
         }
 
-        const submitBtn = document.getElementById("submit-btn");
         if (submitBtn) {
-          submitBtn.addEventListener("click", function (e) {
+          // Remover listener anterior para evitar múltiplos envios
+          submitBtn.replaceWith(submitBtn.cloneNode(true));
+          const novoSubmitBtn = document.getElementById("submit-btn");
+
+          novoSubmitBtn.addEventListener("click", function handleSubmit(e) {
             e.preventDefault();
 
-            const file = fileInput.files[0];
+            const file = fileInput?.files[0];
             const comentario = document.getElementById("comentario-texto")?.value || '';
             const alunoId = document.getElementById("alunoSelecionado")?.value || '';
-            const tipoRemetente = submitBtn.dataset.tipoRemetente;
+            const tipoRemetente = novoSubmitBtn.dataset.tipoRemetente;
             const prazo = document.getElementById("prazo_entrega")?.value || '';
+            const erroPrazo = document.getElementById("erro-prazo");
 
+            // Validações
             if (!file) {
               alert("Por favor, selecione um arquivo válido.");
               return;
             }
+
+            if (tipoRemetente !== "aluno" && !prazo) {
+              if (erroPrazo) erroPrazo.style.display = "block";
+              return;
+            } else {
+              if (erroPrazo) erroPrazo.style.display = "none";
+            }
+
+            // Desativa botão para evitar múltiplos envios
+            novoSubmitBtn.disabled = true;
+            novoSubmitBtn.textContent = "Enviando...";
 
             const formData = new FormData();
             formData.append("documento", file);
@@ -68,15 +89,21 @@ function abrirModalComConteudo(htmlPath) {
                   fecharModalUnico();
                 } else {
                   alert("Erro ao enviar: " + data.mensagem);
+                  novoSubmitBtn.disabled = false;
+                  novoSubmitBtn.textContent = "Enviar";
                 }
               })
               .catch(err => {
                 console.error("Erro no envio:", err);
                 alert("Erro técnico ao enviar o documento.");
+                novoSubmitBtn.disabled = false;
+                novoSubmitBtn.textContent = "Enviar";
               });
           });
         }
-      }, 50);
+      }
+
+      configurarListeners();
     });
 }
 
