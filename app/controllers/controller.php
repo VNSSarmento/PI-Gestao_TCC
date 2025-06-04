@@ -36,7 +36,6 @@ class controller {
         include __DIR__ . '/../views/cadastro.php';
     }
 
-
     public function esqueciSenha() {
         include __DIR__ . '/../views/telas/recuperar_senha.php';
     }
@@ -44,6 +43,11 @@ class controller {
     public function cadastrarUser(){
         include __DIR__.'/../views/telas/add.adm.php';
     }
+
+    public function etapasTcc() {
+        include __DIR__. '/../views/telas/etapas_tcc.php';
+    }
+
 
     public function modalAddUsuario() {
         include __DIR__. '/../views/telas/particional/add_usuario_modal.php';
@@ -442,11 +446,10 @@ public function salvarAnexo() {
     header('Content-Type: application/json');
 
     if ($this->user->salvarDocumentoNoBanco($dados)) {
-        // Atualiza a contagem depois de salvar
+
         $totalDocs = $this->user->contar_entregas($id_aluno);
         $proximaEntrega = intdiv($totalDocs, 2) + 1;
 
-        // Atualiza sessão com entrega liberada
         $_SESSION['entrega_disponivel'] = $proximaEntrega;
 
         echo json_encode([

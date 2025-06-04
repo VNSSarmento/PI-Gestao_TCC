@@ -12,7 +12,7 @@
             <div class="foto_perfil">
               <img src="/Public/assets/uploadsProfessor/<?php echo htmlspecialchars($user['foto'] ?? 'escola.png'); ?>" alt="foto de perfil">
             </div>
-            <div class="perfil_info">
+            <div class="informacoes">
                 <h2><?php echo htmlspecialchars($user['nome']); ?></h2>
                 <p><?php echo htmlspecialchars($user['curso']); ?></p>
             </div>
@@ -22,7 +22,7 @@
                 <ul>
                    <!--  <button class="botao_acao" id="btnAnexarDocumento" onclick="abrirModalComConteudo('/?rota=modal_anexar_doc')">Anexar Documento</button> -->
                     <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=perfil_orientador.html')">Meu Perfil</button>
-                    <button onclick="">Etapas do TCC</button>
+                    <button onclick="carregarConteudo('etapas_tcc')">Etapas do TCC</button>
                    <a href="/?rota=logout"><button onclick="abrirModal('logout')">Fazer LogOut</button></a> 
                 </ul>
             </nav>
@@ -44,11 +44,23 @@
                 <?php endforeach; ?>
             </ul>
         </aside>
-        <main class="content">
-            <section class="entrega_item">
+         <!-- Conteúdo dinâmico -->
+            <main class="content">
+                <?php
+                $rota = $_GET['rota'] ?? 'main';
 
-        </main>
-    </div>
+                switch ($rota) {
+                    case 'etapas_tcc':
+                    $controller->etapasTcc(); // aqui ele inclui a view
+                    break;
+
+                    // outras rotas...
+                    default:
+                    echo "<p>Bem-vindo!</p>";
+                }
+                ?>
+            </main>
+    </div>  
     
     <div id="modalUnico" class="modal">
       <div id="modalContent" class="modal-content"></div>
@@ -83,6 +95,17 @@
                 });
         });
     });
+
+    function carregarConteudo(rota) {
+        fetch(`/?rota=${rota}&parcial=1`)
+            .then(response => response.text())
+            .then(html => {
+            document.querySelector('main.content').innerHTML = html;
+            })
+            .catch(error => {
+            console.error('Erro ao carregar conteúdo:', error);
+    });
+}
 
 </script>
     <script src="/asstes/js/script_sobreposicao.js"></script>

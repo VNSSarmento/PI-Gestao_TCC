@@ -76,6 +76,9 @@ switch ($rota) {
     case 'documentos_aluno':
         $controller->documentosAluno();
         break;
+    case 'etapas_tcc':
+        $controller->etapasTcc();
+        break;  
     default:
         echo "Página não encontrada.";
         break;

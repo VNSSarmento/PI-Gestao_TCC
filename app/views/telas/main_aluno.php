@@ -12,7 +12,7 @@
             <div class="foto_perfil">
               <img src="/Public/assets/uploadsAluno/<?php echo htmlspecialchars($user['foto'] ?? 'default.png'); ?>" alt="foto de perfil">
             </div>
-            <div class="perfil_info">
+            <div class="informacoes">
                 <h2><?php echo htmlspecialchars($user['nome']); ?></h2>
                 <p><?php echo htmlspecialchars($user['curso']); ?></p>
             </div>
