@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/Public/assets/trabalho/css/tela_inicial_orientador.css">
-    <title>Document</title>
+    <title>Painel Aluno</title>
 </head>
 <body>
     <header>
@@ -22,7 +22,7 @@
                  <ul>
                     <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=modal_anexar_doc')">Anexar Documento</button>
                     <button class="botao_acao" onclick="abrirModalComConteudo('/?rota=perfil_orientador.html')">Meu Perfil</button>
-                    <button onclick="">Etapas do TCC</button>
+                    <button onclick="carregarConteudo('etapas_tcc')">Etapas do TCC</button>
                    <a href="/?rota=logout"><button onclick="abrirModal('logout')">Fazer LogOut</button></a> 
                 </ul>
             </nav>
@@ -36,10 +36,11 @@
                  <h3>Orientador</h3>
                  <ul class="colaborador_lista">
                  <?php foreach ($orientador as $prof): ?>
-                    <button class="usuario">
+                    <a href="/?rota=main_aluno"><button class="usuario">
                         <span class="nome"><?= htmlspecialchars($prof) ?></span>
                         <span class="tipo">Orientador</span>
                     </button>
+                    </a>
                   
                <?php endforeach; ?>
                 </ul>
@@ -73,7 +74,7 @@ foreach ($documentos as $doc) {
                                     <span class="separador">|</span>
                                     <span class="descricao"><?= htmlspecialchars($doc['curso']) ?></span>
                                     <span class="separador">|</span>
-                                    <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
+                                    <span class="data">Enviado: <?= date('d/m/Y', strtotime($doc['data_envio'])) ?></span>
                                 </div>
                                 <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
                                     <button class="botao_download">Fazer Download</button>
@@ -91,7 +92,7 @@ foreach ($documentos as $doc) {
                                     <span class="separador">|</span>
                                     <span class="descricao">Correções e comentários</span>
                                     <span class="separador">|</span>
-                                    <span class="data">Enviado: <?= date('d/m/Y H:i:s', strtotime($doc['data_envio'])) ?></span>
+                                    <span class="data">Enviado: <?= date('d/m/Y', strtotime($doc['data_envio'])) ?></span>
                                 </div>
                                 <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
                                     <button class="botao_download">Fazer Download</button>
@@ -119,6 +120,20 @@ foreach ($documentos as $doc) {
         <div id="modalContent" class="modal-content"></div>
     </div>
     </div>
+
+<script>
+    function carregarConteudo(rota) {
+        fetch(`/?rota=${rota}&parcial=1`)
+            .then(response => response.text())
+            .then(html => {
+            document.querySelector('main.content').innerHTML = html;
+            })
+            .catch(error => {
+            console.error('Erro ao carregar conteúdo:', error);
+    });
+}
+</script>
+
     <script src="/asstes/js/script_sobreposicao.js"></script>
     <script src="/Public/assets/trabalho/js/card.js"></script>
     <script src="/Public/assets/trabalho/js/formulario.js"></script>

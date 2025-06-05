@@ -26,7 +26,6 @@
           <ul>
             <li><button onclick="">Meu Perfil</button></li>
             <li><button onclick="">Etapas do TCC</button></li>
-            <li><button onclick="">Chat</button></li>
             <a href="/?rota=logout"><li><button class="Blogout" onclick="">Fazer logout</button></li></a> 
           </ul>
         </nav>
@@ -38,14 +37,14 @@
                   <input type="text" id="campoPesquisa" placeholder="Digite o nome do colaborador">
                 </div>
                 <h3>Colaboradores</h3>
-                  <ul class="colaborador_lista" id="listaColaboradores">
+                <ul class="colaborador_lista" id="listaColaboradores">
                   <?php foreach ($colaboradores as $colab): ?>
                   <li>
                     <span class="nome"><?= htmlspecialchars($colab['nome']) ?></span>
                     <span class="tipo"><?= htmlspecialchars($colab['tipo'] === 'Orientando' ? 'Aluno' : ucfirst($colab['tipo'])) ?></span>
                   </li>
                 <?php endforeach; ?>
-            </ul>
+                </ul>
       </aside>
 
       <main class="content">

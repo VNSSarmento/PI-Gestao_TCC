@@ -8,17 +8,17 @@
 
     <div class="modal_add_campo">
       <label for="email">E-mail</label>
-      <input type="text" id="email" name="email" placeholder="Digitar o E-mail do Usuário" />
+      <input type="email" id="email" name="email" placeholder="Digitar o E-mail do Usuário" required />
     </div>
 
     <div class="modal_add_campo">
       <label for="faculdade">Faculdade</label>
-      <input type="text" id="faculdade" name="faculdade" placeholder="Nome da Faculdade" />
+      <input type="text" id="faculdade" name="faculdade" placeholder="Nome da Faculdade" required/>
     </div>
 
     <div class="modal_add_campo">
       <label for="curso">Curso</label>
-      <input type="text" id="curso" name="curso" placeholder="Nome do Curso" />
+      <input type="text" id="curso" name="curso" placeholder="Nome do Curso" required/>
     </div>
 
     <div class="modal_add_campo" id="campo_orientador" style="display: none;">

@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$db   = 'pi';
+$db   = 'pi-bd-tcc';
 $user = 'root';
 $pass = ''; 
 

@@ -26,11 +26,17 @@
                     <img src="/img/lupa.png" alt="">
                 </div>
                <input type="text" id="campoPesquisa" placeholder="Digite o nome do usuário">
+      
         </section>
 
         <section class="modal_block_lista_wrapper" aria-label="Lista de usuarios">
+            
+
+        
             <ul class="colaborador_lista" id="listaColaboradores" >
                  <?php foreach ($colaboradores as $colab): ?>
+
+                    
                     <li class="colaborador_item" data-id="<?= $colab['id'] ?>" data-tipo="<?= $colab['tipo'] ?>">
                         <div class="modal_block_usuario_info">
                             <img src="/img/pngtree-user-vector-avatar-png-image_1541962-removebg-preview.png" alt="">
@@ -48,6 +54,28 @@
             </ul>
         </section>
     </main>
+
+
+<script>
+  
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('campoPesquisa');
+  const lista = document.getElementById('listaColaboradores');
+  const todosLi = Array.from(lista.querySelectorAll('li'));
+
+  input.addEventListener('input', function () {
+    const termo = input.value.trim().toLowerCase();
+
+    todosLi.forEach(li => {
+      const nome = li.querySelector('.nome').textContent.toLowerCase();
+      const tipo = li.querySelector('.tipo').textContent.toLowerCase();
+
+      const deveMostrar = nome.includes(termo) || tipo.includes(termo);
+      li.style.display = deveMostrar ? 'flex' : 'none';
+    });
+  });
+});
+</script>
 
 </body>
 </html>

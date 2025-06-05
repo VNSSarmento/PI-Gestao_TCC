@@ -27,11 +27,11 @@
                                 <span class="separador">|</span>
                                 <span class="autor">Aluno: <?= htmlspecialchars($nomeAluno) ?></span>
                                 <span class="separador">|</span>
-                                <span class="data">Enviado: <?= htmlspecialchars($doc['data_envio']) ?></span>
+                                <span class="data">Enviado: <?= date('d/m/Y', strtotime($doc['data_envio'])) ?></span>
                             </div>
-                            <a href="/Public/uploads/<?= htmlspecialchars($doc['caminho_arquivo']) ?>" class="botao_download" download>
-                                Fazer Download
-                            </a>
+                                <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
+                                    <button class="botao_download">Fazer Download</button>
+                                </a>
                         </div>
                     <?php else: ?>
                         <div class="documento_item professor">
@@ -43,13 +43,13 @@
                                 <span class="separador">|</span>
                                 <span class="autor">Professor: <?= htmlspecialchars($user['nome']) ?></span>
                                 <span class="separador">|</span>
-                                <span class="data">Enviado: <?= htmlspecialchars($doc['data_envio']) ?></span>
+                                <span class="data">Enviado: <?= date('d/m/Y', strtotime($doc['data_envio'])) ?></span>
                                 <span class="separador">|</span>
                                 <span class="data">Prazo da entrega: <?= htmlspecialchars($doc['prazo_entrega']) ?></span>
                             </div>
-                            <a href="/Public/uploads/<?= htmlspecialchars($doc['caminho_arquivo']) ?>" class="botao_download" download>
-                                Fazer Download
-                            </a>
+                                <a href="<?= htmlspecialchars($doc['caminho_arquivo']) ?>" download>
+                                    <button class="botao_download">Fazer Download</button>
+                                </a>
                         </div>
 
                         <?php if (!empty($doc['comentario'])): ?>
