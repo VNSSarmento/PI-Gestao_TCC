@@ -1,0 +1,33 @@
+# PI-Gestão TCC
+
+Sistema web desenvolvido para auxiliar na **gestão de Trabalhos de Conclusão de Curso (TCC)**, voltado para instituições de ensino, coordenadores, professores e alunos.
+
+## 📋 Funcionalidades
+
+- Login para diferentes perfis: Aluno, Orientador, Coordenador
+- Rotas para diferentes painéis e funcionalidades
+- Organização baseada em arquitetura MVC
+- Envio de e-mails utilizando PHPMailer
+
+## 🛠 Tecnologias utilizadas
+
+- **PHP** (Back-end)
+- **Composer** (Gerenciador de dependências PHP)
+- **PHPMailer** (Envio de e-mails)
+- **MVC** (Padrão de arquitetura)
+
+## 📁 Estrutura do Projeto
+PI-Gestao_TCC/
+├── app/
+│   ├── config.php
+│   ├── controllers/
+│   └── models/
+├── index.php
+├── composer.json
+├── log_update.txt
+└── ...
+
+## ✅ Requisitos
+PHP 7.4+
+
+Composer
